@@ -117,11 +117,12 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
 .fg-cell.winner{background:rgba(245,158,11,.35);border-color:#FCD34D;border-width:3px;animation:fgwin .5s ease-out}
 .fg-cell.loser{opacity:.2;transform:scale(.88)}
 @keyframes fgwin{0%{transform:scale(1)}40%{transform:scale(1.2)}70%{transform:scale(.95)}100%{transform:scale(1)}}
-.fg-res{text-align:center;padding:10px;background:rgba(255,255,255,.08);border-radius:12px;margin-top:8px;flex-shrink:0;visibility:hidden}
-.fg-res.show{visibility:visible}
+.fg-res{text-align:center;padding:10px;background:rgba(255,255,255,.08);border-radius:12px;margin-top:8px;flex-shrink:0;opacity:0;pointer-events:none;transition:opacity .3s}
+.fg-res.show{opacity:1;pointer-events:auto}
 .fg-res p{color:rgba(255,255,255,.6);font-size:13px;margin-bottom:4px}
 .fg-res strong{color:#FCD34D;font-size:26px;display:block}
-.fg-start{margin-top:8px;width:100%;background:var(--or);color:#fff;border:none;border-radius:12px;padding:14px;font-size:17px;font-weight:800;cursor:pointer;flex-shrink:0;visibility:hidden}
+.fg-start{margin-top:8px;width:100%;background:var(--or);color:#fff;border:none;border-radius:12px;padding:14px;font-size:17px;font-weight:800;cursor:pointer;flex-shrink:0;opacity:0;pointer-events:none;transition:opacity .3s}
+.fg-start.show{opacity:1;pointer-events:auto}
 /* ── CELEB ── */
 #celeb{position:fixed;inset:0;z-index:9000;display:none;flex-direction:column;align-items:center;justify-content:center;background:rgba(10,10,20,.9);cursor:pointer}
 #celeb.show{display:flex}
@@ -645,8 +646,7 @@ function rollDice(){
 function openFg(){
   fgT={};fgDone=false;
   document.getElementById('fgRes').classList.remove('show');
-  document.getElementById('fgRes').style.visibility='hidden';
-  document.getElementById('fgBtn').style.visibility='hidden';
+  document.getElementById('fgBtn').classList.remove('show');
   document.getElementById('fgBtn').textContent='🎲 開始抽籤';
   document.getElementById('fgBtn').onclick=fgPick;
   document.getElementById('fgCnt').textContent='等緊大家放手指...';
@@ -708,17 +708,18 @@ function updFgUI(){
   const btn=document.getElementById('fgBtn');
   if(n>=2){
     document.getElementById('fgCnt').textContent=`已放 ${n} 隻手指，準備好！`;
-    btn.style.visibility='visible';btn.textContent=`🎲 開始抽籤（${n} 人）`;
+    btn.textContent=`🎲 開始抽籤（${n} 人）`;
+    btn.classList.add('show');
   } else {
     document.getElementById('fgCnt').textContent=n===0?'等緊大家放手指...':'已放 1 隻手指，等多一人...';
-    btn.style.visibility='hidden';
+    btn.classList.remove('show');
   }
 }
 function fgPick(){
   const held=Object.values(fgT);
   if(held.length<2||fgDone)return;
   fgDone=true;
-  document.getElementById('fgBtn').style.visibility='hidden';
+  document.getElementById('fgBtn').classList.remove('show');
   document.getElementById('fgCnt').textContent='抽緊...';
   let fi=0;
   // First: dim all held cells immediately
@@ -766,7 +767,7 @@ function fgPick(){
     document.getElementById('fgRes').classList.add('show');
     startConf();setTimeout(stopConf,4500);
     const btn=document.getElementById('fgBtn');
-    btn.style.visibility='visible';btn.textContent='🔄 再玩一次';btn.onclick=openFg;
+    btn.textContent='🔄 再玩一次';btn.onclick=openFg;btn.classList.add('show');
   }
 }
 

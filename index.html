@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-title" content="食咩">
 <meta name="theme-color" content="#F97316">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23F97316'/%3E%3Ctext x='50' y='72' font-size='62' text-anchor='middle' font-family='sans-serif' fill='white'%3E食%3C/text%3E%3C/svg%3E">
-<title>食咩？ v2.3</title>
+<title>食咩？ v2.4</title>
 <style>
 :root{--or:#F97316;--ord:#EA6A00;--orl:#FFF7ED;--orm:#FFEDD5;--ro:#F43F5E;--go:#F59E0B;--sl:#1E293B;--slm:#475569;--sll:#F8FAFC;--bd:#E2E8F0;--wh:#fff;--r:14px;--rs:10px}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -158,7 +158,7 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
   <header>
     <div class="logo">
       <div class="logo-icon">食</div>
-      <div class="logo-text">今晚<em>食咩</em>？<span class="logo-ver">v2.3</span></div>
+      <div class="logo-text">今晚<em>食咩</em>？<span class="logo-ver">v2.4</span></div>
     </div>
     <button class="hbtn" onclick="shareApp()">📤 分享</button>
   </header>
@@ -236,7 +236,7 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
 <!-- Finger overlay -->
 <div id="fgOv">
   <div class="fg-hdr">
-    <button class="fg-back" onclick="closeFg()">← 返回</button>
+    <button class="fg-back" id="fgBack">← 返回</button>
     <div class="fg-ttl">👆 手指抽籤</div>
   </div>
   <div class="fg-bdy">
@@ -244,7 +244,7 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
     <div class="fg-cnt" id="fgCnt">等緊大家放手指...</div>
     <div class="fg-grid" id="fgGrid"></div>
     <div class="fg-res" id="fgRes"><p>🎉 先手係</p><strong id="fgWin"></strong></div>
-    <button class="fg-start" id="fgBtn" onclick="fgPick()">🎲 開始抽籤</button>
+    <button class="fg-start" id="fgBtn">🎲 開始抽籤</button>
   </div>
 </div>
 
@@ -648,8 +648,22 @@ function openFg(){
   document.getElementById('fgRes').classList.remove('show');
   document.getElementById('fgBtn').classList.remove('show');
   document.getElementById('fgBtn').textContent='🎲 開始抽籤';
-  document.getElementById('fgBtn').onclick=fgPick;
   document.getElementById('fgCnt').textContent='等緊大家放手指...';
+
+  // Bind start button - both click and touchend for Safari reliability
+  const btn=document.getElementById('fgBtn');
+  const newBtn=btn.cloneNode(true); // clone removes old listeners
+  btn.parentNode.replaceChild(newBtn,btn);
+  newBtn.addEventListener('click',fgPick);
+  newBtn.addEventListener('touchend',function(e){e.preventDefault();fgPick();},{passive:false});
+
+  // Bind back button
+  const back=document.getElementById('fgBack');
+  const newBack=back.cloneNode(true);
+  back.parentNode.replaceChild(newBack,back);
+  newBack.addEventListener('click',closeFg);
+  newBack.addEventListener('touchend',function(e){e.preventDefault();closeFg();},{passive:false});
+
   buildFgGrid();
   document.getElementById('fgOv').classList.add('show');
 }
@@ -766,8 +780,14 @@ function fgPick(){
     document.getElementById('fgCnt').textContent='🎉 結果出爐！';
     document.getElementById('fgRes').classList.add('show');
     startConf();setTimeout(stopConf,4500);
+    // Rebind replay button
     const btn=document.getElementById('fgBtn');
-    btn.textContent='🔄 再玩一次';btn.onclick=openFg;btn.classList.add('show');
+    const newBtn=btn.cloneNode(true);
+    btn.parentNode.replaceChild(newBtn,btn);
+    newBtn.textContent='🔄 再玩一次';
+    newBtn.classList.add('show');
+    newBtn.addEventListener('click',openFg);
+    newBtn.addEventListener('touchend',function(e){e.preventDefault();openFg();},{passive:false});
   }
 }
 

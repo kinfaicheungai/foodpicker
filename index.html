@@ -1,834 +1,2239 @@
 <!DOCTYPE html>
-<html lang="zh-HK">
+<html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="食咩">
-<meta name="theme-color" content="#F97316">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23F97316'/%3E%3Ctext x='50' y='72' font-size='62' text-anchor='middle' font-family='sans-serif' fill='white'%3E食%3C/text%3E%3C/svg%3E">
-<title>食咩？ v2.4</title>
+<meta name="apple-mobile-web-app-title" content="資投">
+<title>TC Investment Tracker</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23111318'/><text y='.9em' font-size='70' x='50%' text-anchor='middle' dominant-baseline='top' fill='%2360a5fa' font-family='sans-serif'>資</text></svg>">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23111318'/><text y='.9em' font-size='70' x='50%' text-anchor='middle' dominant-baseline='top' fill='%2360a5fa' font-family='sans-serif'>資</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--or:#F97316;--ord:#EA6A00;--orl:#FFF7ED;--orm:#FFEDD5;--ro:#F43F5E;--go:#F59E0B;--sl:#1E293B;--slm:#475569;--sll:#F8FAFC;--bd:#E2E8F0;--wh:#fff;--r:14px;--rs:10px}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:-apple-system,"Helvetica Neue",sans-serif;background:linear-gradient(160deg,#FFF7ED,#FFF1F2);min-height:100vh;color:var(--sl);overscroll-behavior:none}
-.wrap{max-width:480px;margin:0 auto;padding:16px 14px 110px}
-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.logo{display:flex;align-items:center;gap:8px}
-.logo-icon{width:40px;height:40px;border-radius:10px;background:var(--or);display:flex;align-items:center;justify-content:center;font-size:24px;color:#fff;font-weight:900}
-.logo-text{font-size:20px;font-weight:800}
-.logo-text em{color:var(--or);font-style:normal}
-.logo-ver{font-size:11px;color:var(--slm);margin-left:4px;font-weight:500}
-.hbtn{background:var(--wh);border:1px solid var(--bd);border-radius:50px;padding:7px 13px;font-size:13px;cursor:pointer;color:var(--slm)}
-.card{background:var(--wh);border-radius:var(--r);box-shadow:0 1px 4px rgba(0,0,0,.07);padding:16px;margin-bottom:11px}
-.clabel{font-size:11px;font-weight:700;color:var(--or);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px}
-.irow{display:flex;gap:8px}
-.irow input{flex:1;border:1.5px solid var(--bd);border-radius:var(--rs);padding:10px 12px;font-size:15px;outline:none;background:var(--sll);color:var(--sl)}
-.irow input:focus{border-color:var(--or);background:var(--wh)}
-.badd{background:var(--or);color:#fff;border:none;border-radius:var(--rs);padding:10px 14px;font-size:20px;cursor:pointer;line-height:1}
-.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;min-height:6px}
-.tag{display:inline-flex;align-items:center;gap:4px;background:var(--orm);border-radius:50px;padding:5px 10px;font-size:14px;font-weight:500}
-.tagw{font-size:11px;color:var(--or);font-weight:700}
-.tx{background:none;border:none;color:#94A3B8;cursor:pointer;font-size:13px;padding:0;line-height:1}
-.togrow{display:flex;align-items:center;justify-content:space-between;margin-top:12px}
-.tog{width:42px;height:24px;background:var(--bd);border-radius:50px;position:relative;cursor:pointer;border:none;flex-shrink:0}
-.tog.on{background:var(--or)}
-.tog::after{content:'';position:absolute;width:18px;height:18px;background:#fff;border-radius:50%;top:3px;left:3px;transition:transform .2s}
-.tog.on::after{transform:translateX(18px)}
-.wpanel{margin-top:10px;display:none}
-.wpanel.open{display:block}
-.wrow{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--bd)}
-.wrow:last-child{border:none}
-.wname{flex:1;font-size:14px}
-.wbar-wrap{width:50px;height:5px;background:var(--bd);border-radius:3px;overflow:hidden}
-.wbar{height:100%;background:var(--or);border-radius:3px}
-.wbtn{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--bd);background:var(--sll);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.wval{min-width:20px;text-align:center;font-size:14px;font-weight:700;color:var(--or)}
-.mtabs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.mtab{border:1.5px solid var(--bd);background:var(--sll);border-radius:var(--rs);padding:10px 6px;font-size:13px;font-weight:600;cursor:pointer;text-align:center;color:var(--slm)}
-.mtab .ic{font-size:20px;display:block;margin-bottom:3px}
-.mtab.on{border-color:var(--or);background:var(--orl);color:var(--or)}
-.ptags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.ptag{background:#FFF1F2;color:var(--ro);border-radius:50px;padding:5px 10px;font-size:13px;display:inline-flex;align-items:center;gap:4px}
-/* Result */
-.rarea{background:var(--sl);border-radius:var(--r);padding:22px;text-align:center;margin-bottom:11px;min-height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.rlbl{font-size:13px;color:#94A3B8;margin-bottom:6px}
-.rwin{font-size:34px;font-weight:800;color:#FCD34D}
-.rpun{background:rgba(244,63,94,.2);border-radius:50px;padding:6px 14px;font-size:14px;color:#FDA4AF;margin-top:8px}
-.rempty{text-align:center}
-.rei{font-size:36px;margin-bottom:5px}
-.reh{font-size:14px;color:#64748B}
-/* Buttons */
-.bplay{width:100%;background:var(--or);color:#fff;border:none;border-radius:var(--r);padding:15px;font-size:17px;font-weight:800;cursor:pointer}
-.bplay:disabled{background:#CBD5E1;cursor:not-allowed}
-.bplay.red{background:var(--ro)}
-.brow{display:flex;gap:8px;margin-top:8px}
-.bsec{flex:1;background:var(--wh);border:1.5px solid var(--bd);border-radius:var(--rs);padding:11px;font-size:14px;font-weight:600;cursor:pointer;color:var(--slm)}
-/* ── CHEST ── */
-.chest-grid{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;padding:6px 0 8px}
-.chest-item{width:76px;text-align:center;cursor:pointer}
-.chest-box{
-  width:76px;height:76px;border-radius:14px;
-  background:var(--orl);border:2px solid var(--bd);
-  display:flex;align-items:center;justify-content:center;
-  font-size:32px;position:relative;overflow:hidden;
-  transition:border-color .2s,background .2s;
+:root{
+  --bg:#080b10;--bg2:#0e1219;--bg3:#141924;--bg4:#1b2232;--bg5:#222b3d;
+  --line:rgba(255,255,255,0.07);--line2:rgba(255,255,255,0.13);
+  --txt:#cdd5e8;--txt2:#7a8aaa;--txt3:#3a4460;
+  --me:#60a5fa;--ane:#c084fc;--od:#34d399;--all:#fb923c;
+  --up:#34d399;--dn:#f87171;--warn:#fbbf24;--teal:#22d3ee;
+  --r:12px;--rs:8px;--nav:62px;
+  --mono:'DM Mono',monospace;--sans:'Sora',sans-serif;
 }
-.chest-item:hover .chest-box{border-color:var(--go);background:#FFFBEB}
-.chest-item.picked .chest-box{border-color:var(--go);background:#FFFBEB;font-size:14px;font-weight:700;color:#92400E;padding:4px}
-.chest-item.faded{opacity:.3;pointer-events:none}
-.chest-item.picked.faded{opacity:.3}
-.chest-num{font-size:11px;color:var(--slm);margin-top:4px}
-.chest-hint{text-align:center;font-size:13px;color:var(--slm);margin-top:6px}
-/* ── ELIM WHEEL ── */
-.wheel-wrap{position:relative;display:flex;justify-content:center;align-items:center;padding:12px 0 8px}
-.wptr{position:absolute;top:6px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:11px solid transparent;border-right:11px solid transparent;border-top:26px solid var(--ro);z-index:10}
-.wctr{position:absolute;width:30px;height:30px;background:#fff;border-radius:50%;border:3px solid var(--bd);top:50%;left:50%;transform:translate(-50%,-50%);z-index:10}
-.einfo{text-align:center;font-size:13px;color:var(--slm);margin-bottom:8px}
-.einfo b{color:var(--ro)}
-.elog{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-.etag{background:#F1F5F9;color:#94A3B8;border-radius:50px;padding:4px 10px;font-size:13px;text-decoration:line-through}
-.ewtag{background:#FEF3C7;color:#92400E;border:2px solid var(--go);border-radius:50px;padding:4px 12px;font-size:14px;font-weight:700}
-/* ── DICE ── */
-.dice-count-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.dice-count-lbl{font-size:14px;font-weight:600;color:var(--slm)}
-.dice-count-btns{display:flex;gap:8px}
-.dcb{width:38px;height:38px;border-radius:50%;border:1.5px solid var(--bd);background:var(--sll);font-size:15px;font-weight:700;cursor:pointer;color:var(--slm);transition:all .2s}
-.dcb.on{border-color:var(--or);background:var(--orl);color:var(--or)}
-.dice-faces-wrap{display:flex;justify-content:center;gap:16px;padding:10px 0 8px;min-height:100px;align-items:center}
-.d-face{font-size:56px;line-height:1;transition:transform .1s}
-.d-face.shake{transform:rotate(20deg) scale(1.15)}
-.dice-total{text-align:center;font-size:15px;color:var(--slm);min-height:24px;font-weight:600}
-/* ── FINGER OVERLAY ── */
-#fgOv{position:fixed;inset:0;z-index:8000;background:linear-gradient(160deg,#0F172A,#1E0A2E);display:none;flex-direction:column;touch-action:none}
-#fgOv.show{display:flex}
-.fg-hdr{display:flex;align-items:center;padding:max(env(safe-area-inset-top),14px) 16px 10px;flex-shrink:0}
-.fg-back{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:50px;padding:8px 14px;color:#fff;font-size:14px;cursor:pointer}
-.fg-ttl{flex:1;text-align:center;color:#fff;font-size:18px;font-weight:800;margin-right:70px}
-.fg-bdy{flex:1;display:flex;flex-direction:column;padding:4px 14px max(env(safe-area-inset-bottom),16px);min-height:0}
-.fg-hint{text-align:center;color:rgba(255,255,255,.55);font-size:13px;margin-bottom:8px;flex-shrink:0}
-.fg-cnt{text-align:center;color:#FCD34D;font-size:15px;font-weight:700;margin-bottom:8px;flex-shrink:0}
-.fg-grid{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:1fr;gap:8px;flex:1;min-height:0}
-.fg-cell{border-radius:14px;background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.12);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:all .15s;user-select:none;-webkit-user-select:none}
-.fg-cell .em{font-size:26px;pointer-events:none}
-.fg-cell .nm{font-size:11px;color:rgba(255,255,255,.35);margin-top:2px;pointer-events:none}
-.fg-cell.held{background:rgba(99,102,241,.45);border-color:#818CF8;transform:scale(.92)}
-.fg-cell.winner{background:rgba(245,158,11,.35);border-color:#FCD34D;border-width:3px;animation:fgwin .5s ease-out}
-.fg-cell.loser{opacity:.2;transform:scale(.88)}
-@keyframes fgwin{0%{transform:scale(1)}40%{transform:scale(1.2)}70%{transform:scale(.95)}100%{transform:scale(1)}}
-.fg-res{text-align:center;padding:10px;background:rgba(255,255,255,.08);border-radius:12px;margin-top:8px;flex-shrink:0;opacity:0;pointer-events:none;transition:opacity .3s}
-.fg-res.show{opacity:1;pointer-events:auto}
-.fg-res p{color:rgba(255,255,255,.6);font-size:13px;margin-bottom:4px}
-.fg-res strong{color:#FCD34D;font-size:26px;display:block}
-.fg-start{margin-top:8px;width:100%;background:var(--or);color:#fff;border:none;border-radius:12px;padding:14px;font-size:17px;font-weight:800;cursor:pointer;flex-shrink:0;opacity:0;pointer-events:none;transition:opacity .3s}
-.fg-start.show{opacity:1;pointer-events:auto}
-/* ── CELEB ── */
-#celeb{position:fixed;inset:0;z-index:9000;display:none;flex-direction:column;align-items:center;justify-content:center;background:rgba(10,10,20,.9);cursor:pointer}
-#celeb.show{display:flex}
-#ccanvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-.cbox{position:relative;z-index:2;text-align:center;padding:28px 24px;animation:cpop .5s cubic-bezier(.34,1.56,.64,1)}
-@keyframes cpop{0%{transform:scale(.4);opacity:0}65%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
-.clbl{font-size:14px;color:#94A3B8;margin-bottom:8px}
-.cwin{font-size:52px;font-weight:900;color:#FCD34D;line-height:1.1;margin-bottom:12px}
-.cpun{background:rgba(244,63,94,.25);border:1px solid rgba(244,63,94,.35);border-radius:50px;padding:8px 20px;font-size:15px;color:#FDA4AF;margin-bottom:22px}
-.cclose{background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:50px;padding:11px 28px;font-size:14px;color:#fff;cursor:pointer;font-weight:600}
-/* ── BOTTOM TAB BAR ── */
-.btab-bar{
-  position:fixed;bottom:0;left:0;right:0;
-  background:var(--wh);border-top:1px solid var(--bd);
-  display:grid;grid-template-columns:repeat(4,1fr);
-  padding-bottom:env(safe-area-inset-bottom);
-  z-index:100;
-}
-.btab{
-  display:flex;flex-direction:column;align-items:center;
-  padding:8px 4px 6px;cursor:pointer;border:none;background:none;
-  color:var(--slm);font-size:11px;font-weight:600;gap:3px;
-  transition:color .15s;
-}
-.btab .btic{font-size:22px;line-height:1}
-.btab.on{color:var(--or)}
-.toast{position:fixed;bottom:70px;left:50%;transform:translateX(-50%);background:var(--sl);color:#fff;padding:10px 20px;border-radius:50px;font-size:14px;font-weight:600;opacity:0;transition:opacity .3s;pointer-events:none;z-index:9999;white-space:nowrap}
-.toast.show{opacity:1}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--txt);font-family:var(--sans);min-height:100vh;overflow-x:hidden}
+
+/* PAGES */
+.page{display:none;padding:0 14px calc(var(--nav) + 16px + env(safe-area-inset-bottom));min-height:100vh}
+.page.active{display:block}
+.ph{padding:50px 0 14px}
+.ph-top{display:flex;justify-content:space-between;align-items:flex-start}
+.ph h1{font-size:24px;font-weight:700;letter-spacing:-.4px}
+.ph-sub{font-size:12px;color:var(--txt2);margin-top:3px}
+
+/* VERSION */
+.ver{display:inline-flex;align-items:center;padding:2px 9px;background:var(--bg3);border:1px solid var(--line2);border-radius:20px;font-size:10px;font-weight:600;color:var(--txt2);font-family:var(--mono)}
+
+/* DROPDOWN */
+.dd-wrap{position:relative}
+.dd-btn{display:flex;align-items:center;gap:7px;padding:7px 12px;background:var(--bg3);border:1px solid var(--line2);border-radius:30px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:var(--sans);color:var(--txt)}
+.src-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dd-arr{font-size:9px;color:var(--txt2)}
+.dd-menu{position:absolute;top:calc(100% + 6px);right:0;background:var(--bg3);border:1px solid var(--line2);border-radius:var(--r);overflow:hidden;z-index:50;min-width:150px;box-shadow:0 8px 32px rgba(0,0,0,.6);display:none}
+.dd-menu.open{display:block}
+.dd-opt{display:flex;align-items:center;gap:10px;padding:11px 14px;font-size:13px;font-weight:500;cursor:pointer;transition:background .15s}
+.dd-opt:hover,.dd-opt.active{background:var(--bg4)}
+
+/* CARDS */
+.card{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);margin-bottom:10px;overflow:hidden}
+.card-hd{padding:12px 14px 10px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.card-t{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--txt2)}
+.card-body{padding:12px 14px}
+
+/* STAT GRID */
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.sc{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);padding:12px 13px}
+.sc.full{grid-column:span 2}
+.sl{font-size:9.5px;color:var(--txt3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px}
+.sv{font-size:18px;font-weight:700;font-family:var(--mono);letter-spacing:-.3px}
+.ss{font-size:11px;color:var(--txt2);margin-top:2px}
+
+/* ROWS */
+.row{display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px}
+.row:last-child{border-bottom:none}
+.row-l{color:var(--txt2);line-height:1.4}
+.row-v{font-family:var(--mono);font-size:12.5px;font-weight:500;text-align:right;flex-shrink:0;margin-left:10px}
+
+/* PILLS */
+.pill{display:inline-flex;align-items:center;padding:1px 7px;border-radius:20px;font-size:9.5px;font-weight:700;letter-spacing:.2px}
+.pm{background:rgba(96,165,250,.14);color:var(--me)}
+.pa{background:rgba(192,132,252,.14);color:var(--ane)}
+.po{background:rgba(52,211,153,.14);color:var(--od)}
+.px{background:rgba(251,146,60,.14);color:var(--all)}
+
+/* SEGMENT */
+.seg-wrap{display:flex;background:var(--bg3);border-radius:var(--rs);padding:3px;gap:2px;margin-bottom:12px}
+.seg-btn{flex:1;padding:7px 4px;text-align:center;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;color:var(--txt2);transition:all .2s;border:none;background:none;font-family:var(--sans)}
+.seg-btn.active{background:var(--bg);color:var(--txt);box-shadow:0 1px 4px rgba(0,0,0,.4)}
+
+/* FUND ENTRY CARD */
+.fcard{background:var(--bg3);border:1px solid var(--line);border-radius:var(--rs);padding:13px;margin-bottom:8px}
+.fcard-top{display:flex;align-items:flex-start;gap:10px}
+.fcard-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.fcard-info{flex:1}
+.fcard-name{font-size:13.5px;font-weight:600}
+.fcard-sub{font-size:11px;color:var(--txt2);margin-top:2px;font-family:var(--mono)}
+.fcard-right{text-align:right;flex-shrink:0}
+.fcard-amt{font-size:14px;font-weight:700;font-family:var(--mono)}
+.fcard-int{font-size:11px;margin-top:2px;color:var(--warn)}
+/* interest breakdown bar */
+.int-bar{margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+.int-row{display:flex;justify-content:space-between;font-size:11.5px;padding:2px 0}
+.int-row .il{color:var(--txt2)}
+.int-row .iv{font-family:var(--mono);color:var(--warn)}
+
+/* HOLDINGS */
+.hlist{display:flex;flex-direction:column;gap:7px}
+.hrow{background:var(--bg3);border:1px solid var(--line);border-radius:var(--rs);padding:12px 13px;cursor:pointer}
+.hrow-top{display:flex;align-items:center;gap:10px}
+.tic{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;font-family:var(--mono)}
+.hi{flex:1;min-width:0}
+.ht{font-size:14px;font-weight:600}
+.hs{font-size:11px;color:var(--txt2);margin-top:1px;font-family:var(--mono)}
+.hr{text-align:right;flex-shrink:0}
+.hv{font-size:14px;font-weight:700;font-family:var(--mono)}
+.hp{font-size:11px;margin-top:2px;font-family:var(--mono)}
+.stripe{display:flex;height:3px;margin-top:8px;border-radius:2px;overflow:hidden;gap:2px}
+.stripe-seg{height:100%;border-radius:2px}
+
+/* DONUT */
+.donut-wrap{display:flex;align-items:center;gap:14px;padding:2px 0 4px}
+.dleg{flex:1;display:flex;flex-direction:column;gap:8px}
+.dleg-row{display:flex;align-items:center;gap:7px;font-size:12px}
+.dleg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dleg-pct{margin-left:auto;font-family:var(--mono);font-size:11px;font-weight:600}
+
+/* FORM */
+.fl{font-size:10px;color:var(--txt2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:block}
+.fi{width:100%;background:var(--bg3);border:1px solid var(--line);border-radius:var(--rs);padding:11px 12px;color:var(--txt);font-size:15px;font-family:var(--sans);outline:none;transition:border-color .2s;-webkit-appearance:none}
+.fi:focus{border-color:var(--line2)}
+.fi::placeholder{color:var(--txt3)}
+select.fi{cursor:pointer}
+.fs{margin-bottom:12px}
+.fr2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.btn{padding:12px;border-radius:var(--rs);font-size:14px;font-weight:600;cursor:pointer;border:none;font-family:var(--sans);transition:opacity .15s;width:100%}
+.btn-p{background:var(--me);color:#050810}
+.btn-s{background:var(--bg3);color:var(--txt);border:1px solid var(--line)}
+.btn-r{background:rgba(248,113,113,.1);color:var(--dn);border:1px solid rgba(248,113,113,.2)}
+.btn-sm{width:auto;padding:5px 12px;font-size:11.5px;border-radius:20px}
+.btn:active{opacity:.75}
+.btn-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+
+/* SYNC BAR */
+.sync-bar{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--bg3);border:1px solid var(--line);border-radius:var(--rs);margin-bottom:10px;font-size:12px}
+.sdot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.sdot.ok{background:var(--up)}
+.sdot.busy{background:var(--warn);animation:pulse 1s infinite}
+.sdot.err{background:var(--dn)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.stxt{flex:1;color:var(--txt2)}
+.stime{font-family:var(--mono);font-size:10.5px;color:var(--txt3)}
+
+/* RATES BAR */
+.rbar{display:flex;gap:12px;padding:8px 12px;background:var(--bg3);border:1px solid var(--line);border-radius:var(--rs);margin-bottom:10px;overflow-x:auto}
+.ritem{display:flex;flex-direction:column;align-items:center;flex-shrink:0;gap:2px}
+.rpair{font-size:9px;color:var(--txt3);text-transform:uppercase;letter-spacing:.4px}
+.rval{font-family:var(--mono);font-size:12.5px;font-weight:600;color:var(--teal)}
+
+/* NAV */
+.nav{position:fixed;bottom:0;left:0;right:0;height:var(--nav);background:rgba(8,11,16,.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--line2);display:flex;align-items:stretch;z-index:100;padding-bottom:env(safe-area-inset-bottom)}
+.nb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;color:rgba(255,255,255,0.3);font-size:9px;font-weight:600;letter-spacing:.2px;border:none;background:none;font-family:var(--sans);transition:color .2s;text-transform:uppercase}
+.nb.active{color:var(--me)}
+.nb svg{width:20px;height:20px;stroke-width:1.8}
+.nb.fab .fc{width:42px;height:42px;background:var(--me);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(96,165,250,.45)}
+.nb.fab .fc svg{width:22px;height:22px;stroke-width:2.5;color:#050810}
+
+/* MODAL */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;display:none;align-items:flex-end;backdrop-filter:blur(4px)}
+.overlay.open{display:flex}
+.modal{background:var(--bg2);border-radius:var(--r) var(--r) 0 0;width:100%;max-height:93vh;overflow-y:auto;padding:16px 14px calc(20px + env(safe-area-inset-bottom))}
+.mh{width:36px;height:4px;background:var(--line2);border-radius:2px;margin:0 auto 16px}
+.mt{font-size:17px;font-weight:700;margin-bottom:16px}
+
+/* ALERTS */
+.alert{padding:10px 12px;border-radius:var(--rs);font-size:12px;margin-bottom:10px}
+.ai{background:rgba(96,165,250,.07);border:1px solid rgba(96,165,250,.18);color:var(--me)}
+.aw{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.18);color:var(--warn)}
+
+/* TICKER TAG */
+.ttag{display:inline-flex;align-items:center;gap:5px;padding:4px 9px;background:var(--bg4);border:1px solid var(--line2);border-radius:6px;font-family:var(--mono);font-size:12px;font-weight:500}
+.ttag .rm{background:none;border:none;color:var(--txt3);cursor:pointer;padding:0;font-size:13px;line-height:1}
+.ttags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+
+/* MISC */
+.spin{width:14px;height:14px;border:2px solid var(--line2);border-top-color:var(--me);border-radius:50%;animation:sp .7s linear infinite;display:inline-block;vertical-align:middle}
+@keyframes sp{to{transform:rotate(360deg)}}
+.empty{text-align:center;padding:28px 16px;color:var(--txt3);font-size:12px}
+.div{height:1px;background:var(--line);margin:10px 0}
+.live{display:inline-flex;align-items:center;gap:4px;font-size:10px;color:var(--up)}
+.ldot{width:5px;height:5px;border-radius:50%;background:var(--up);animation:pulse 2s infinite}
+.toast{position:fixed;bottom:calc(var(--nav) + 12px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%) translateY(14px);background:var(--bg4);color:var(--txt);padding:8px 16px;border-radius:20px;font-size:13px;font-weight:500;z-index:300;opacity:0;transition:all .25s;white-space:nowrap;border:1px solid var(--line2)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+::-webkit-scrollbar{width:0}
+
+/* RBA RATE DISPLAY */
+.rba-chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.2);border-radius:20px;font-size:11.5px;font-weight:600;color:var(--teal);font-family:var(--mono)}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <div class="logo">
-      <div class="logo-icon">食</div>
-      <div class="logo-text">今晚<em>食咩</em>？<span class="logo-ver">v2.4</span></div>
-    </div>
-    <button class="hbtn" onclick="shareApp()">📤 分享</button>
-  </header>
 
+<!-- ══ DASHBOARD ══ -->
+<div id="pg-dash" class="page active">
+  <div class="ph">
+    <div class="ph-top">
+      <div><h1>TC Investment</h1><div class="ph-sub" id="dash-date"></div></div>
+      <span class="ver" id="ver-badge">v5.7</span>
+    </div>
+  </div>
+  <div id="sync-bar" class="sync-bar">
+    <div class="sdot busy" id="sdot"></div>
+    <span class="stxt" id="stxt">連接 Google Sheets…</span>
+    <span class="stime" id="stime"></span>
+  </div>
+  <div id="rbar" class="rbar" style="display:none"></div>
+  <div class="sg">
+    <div class="sc full" style="background:var(--bg3);border-color:var(--line2)">
+      <div class="sl">Portfolio Value (USD)</div>
+      <div class="sv" id="d-total">—</div>
+      <div class="ss" id="d-total-sub">Loading…</div>
+    </div>
+    <div class="sc">
+      <div class="sl">Unrealised P&L</div>
+      <div class="sv" id="d-unreal">—</div>
+      <div class="ss" id="d-upct">—</div>
+    </div>
+    <div class="sc">
+      <div class="sl">Total Interest Cost</div>
+      <div class="sv warn" id="d-int">—</div>
+      <div class="ss">All sources (AUD)</div>
+    </div>
+    <div class="sc full">
+      <div class="sl">Net Return vs Bank</div>
+      <div class="sv" id="d-net">—</div>
+      <div class="ss">P&L minus theoretical interest</div>
+    </div>
+  </div>
   <div class="card">
-    <div class="clabel">選項</div>
-    <div class="irow">
-      <input id="iInput" type="text" placeholder="加入餐廳 / 選項..." maxlength="10">
-      <button class="badd" onclick="addItem()">＋</button>
+    <div class="card-hd">
+      <span class="card-t">By Source</span>
+      <button class="btn btn-s btn-sm" onclick="refreshAll()">⟳ Refresh All</button>
     </div>
-    <div class="tags" id="tagsEl"></div>
-    <div class="togrow">
-      <span style="font-size:13px;font-weight:600;color:var(--slm)">⚖️ 調整概率權重</span>
-      <button class="tog" id="wTog" onclick="toggleW()"></button>
-    </div>
-    <div class="wpanel" id="wPanel"></div>
+    <div class="card-body" id="d-src"></div>
   </div>
-
-  <div class="card" id="cChest">
-    <div class="clabel">選一個寶箱</div>
-    <div class="chest-grid" id="chestGrid"></div>
-    <div class="chest-hint" id="chestHint">👆 點一個寶箱開啟</div>
+  <div class="card">
+    <div class="card-hd"><span class="card-t">Holdings</span></div>
+    <div class="card-body"><div class="hlist" id="d-hold"></div></div>
   </div>
+</div>
 
-  <div class="card" id="cElim" style="display:none">
-    <div class="clabel">淘汰轉盤</div>
-    <div class="einfo" id="eInfo">按下開始淘汰轉盤</div>
-    <div class="wheel-wrap">
-      <div class="wptr"></div>
-      <canvas id="wCanvas" width="260" height="260"></canvas>
-      <div class="wctr"></div>
-    </div>
-    <div class="elog" id="eLog"></div>
-  </div>
-
-  <div class="card" id="cDice" style="display:none">
-    <div class="clabel">骰子</div>
-    <div class="dice-count-row">
-      <span class="dice-count-lbl">骰子數量</span>
-      <div class="dice-count-btns">
-        <button class="dcb" id="dc1" onclick="setDiceCount(1)">1</button>
-        <button class="dcb" id="dc2" onclick="setDiceCount(2)">2</button>
-        <button class="dcb on" id="dc3" onclick="setDiceCount(3)">3</button>
+<!-- ══ FUNDS + INTEREST ══ -->
+<div id="pg-funds" class="page">
+  <div class="ph">
+    <div class="ph-top">
+      <div><h1>資金</h1><div class="ph-sub">進出 · 計息 · 分配</div></div>
+      <div class="dd-wrap">
+        <button class="dd-btn" onclick="toggleDD('fd-dd')">
+          <span class="src-dot" id="fd-dot" style="background:var(--all)"></span>
+          <span id="fd-lbl">匯總</span><span class="dd-arr">▾</span>
+        </button>
+        <div class="dd-menu" id="fd-dd">
+          <div class="dd-opt active" onclick="setFSrc('all')"><span class="src-dot" style="background:var(--all)"></span>匯總</div>
+          <div class="dd-opt" onclick="setFSrc('me')"><span class="src-dot" style="background:var(--me)"></span>Me</div>
+          <div class="dd-opt" onclick="setFSrc('ane')"><span class="src-dot" style="background:var(--ane)"></span>Ane</div>
+          <div class="dd-opt" onclick="setFSrc('odosan')"><span class="src-dot" style="background:var(--od)"></span>Odosan</div>
+        </div>
       </div>
     </div>
-    <div class="dice-faces-wrap" id="diceFaces"></div>
-    <div class="dice-total" id="diceTotal"></div>
   </div>
+
+  <!-- RBA rate display -->
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+    <span style="font-size:11.5px;color:var(--txt2)">RBA Cash Rate:</span>
+    <span class="rba-chip" id="rba-chip">—</span>
+    <span style="font-size:11px;color:var(--txt3)" id="rba-updated"></span>
+    <button class="btn btn-s btn-sm" onclick="fetchRBA()">↻</button>
+  </div>
+
+  <!-- Summary stats -->
+  <div class="sg" id="f-stats"></div>
+
+  <!-- View toggle -->
+  <div class="seg-wrap">
+    <button class="seg-btn active" onclick="setFView('flows',this)">借款記錄</button>
+    <button class="seg-btn" onclick="setFView('cashflow',this)">交易現金流</button>
+    <button class="seg-btn" onclick="setFView('alloc',this)">資金分配</button>
+    <button class="seg-btn" onclick="setFView('interest',this)">計息明細</button>
+  </div>
+
+  <!-- Flows view -->
+  <div id="fv-flows">
+    <div id="f-flow-list"></div>
+    <button class="btn btn-s" onclick="openFundModal()" style="margin-top:4px">+ 新增資金記錄</button>
+  </div>
+
+  <!-- Cashflow view (auto from trades) -->
+  <div id="fv-cashflow" style="display:none">
+    <div class="alert ai" style="margin-bottom:10px">📊 根據交易記錄自動計算。買入扣減可用資金，賣出回收資金。無需手動入。</div>
+    <div id="f-cashflow-list"></div>
+  </div>
+
+  <!-- Interest view -->
+  <div id="fv-interest" style="display:none">
+    <div class="alert ai" style="margin-bottom:10px">每筆入金獨立按日複利計算，唔受股票買賣影響。整筆還款後停止計息。</div>
+    <div id="f-int-list"></div>
+    <div class="card" style="margin-top:12px">
+      <div class="card-hd">
+        <span class="card-t">利息支付記錄</span>
+        <button class="btn btn-s btn-sm" onclick="openInterestPayModal()">+ 記錄已付利息</button>
+      </div>
+      <div class="card-body" id="f-int-pay-list"></div>
+    </div>
+  </div>
+
+  <!-- Allocation view -->
+  <div id="fv-alloc" style="display:none">
+    <div class="card">
+      <div class="card-hd"><span class="card-t">資金分配</span></div>
+      <div class="card-body">
+        <div class="donut-wrap">
+          <canvas id="f-donut" width="110" height="110"></canvas>
+          <div class="dleg" id="f-leg"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-hd"><span class="card-t">投資 vs 銀行利息對比</span></div>
+      <div class="card-body" id="f-compare"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ADD TRADE ══ -->
+<div id="pg-add" class="page">
+  <div class="ph"><h1>Add Trade</h1><div class="ph-sub">買入 · 賣出 · 派息</div></div>
+  <div class="seg-wrap" style="margin-bottom:16px">
+    <button class="seg-btn active" onclick="setTT('buy',this)">Buy</button>
+    <button class="seg-btn" onclick="setTT('sell',this)">Sell</button>
+    <button class="seg-btn" onclick="setTT('dividend',this)">Dividend</button>
+  </div>
+  <div class="fs">
+    <label class="fl">Ticker</label>
+    <select class="fi" id="t-ticker"><option value="">Select ticker…</option></select>
+  </div>
+  <div class="fr2 fs">
+    <div><label class="fl">Date</label><input type="date" class="fi" id="t-date"></div>
+    <div><label class="fl">資金來源</label>
+      <select class="fi" id="t-src">
+        <option value="me">Me</option><option value="ane">Ane</option><option value="odosan">Odosan</option>
+      </select></div>
+  </div>
+  <div id="t-bs">
+    <div class="fr2 fs">
+      <div><label class="fl">Shares</label><input type="number" class="fi" id="t-shares" placeholder="0" step="0.0001" oninput="updatePreview()"></div>
+      <div><label class="fl">Price</label><input type="number" class="fi" id="t-price" placeholder="0.00" step="0.01" oninput="updatePreview()"></div>
+    </div>
+    <div class="fr2 fs">
+      <div><label class="fl">Brokerage Fee</label><input type="number" class="fi" id="t-fee" value="1.68" step="0.01"></div>
+      <div><label class="fl">Currency</label>
+        <select class="fi" id="t-cur">
+          <option value="USD">USD</option><option value="EUR">EUR</option><option value="AUD">AUD</option>
+        </select></div>
+    </div>
+    <div class="alert aw" id="t-warn" style="display:none"></div>
+  </div>
+  <div class="fs" id="t-div-f" style="display:none">
+    <label class="fl">Dividend (USD)</label>
+    <input type="number" class="fi" id="t-div" placeholder="0.00" step="0.01">
+  </div>
+  <div class="fs"><label class="fl">Notes</label><input class="fi" id="t-notes" placeholder="Optional…"></div>
+  <div class="card" id="t-preview" style="display:none;margin-bottom:12px">
+    <div class="card-hd"><span class="card-t">Preview</span></div>
+    <div class="card-body">
+      <div class="row"><span class="row-l">Total cost</span><span class="row-v" id="pv-total">—</span></div>
+      <div class="row"><span class="row-l">Per share</span><span class="row-v" id="pv-per">—</span></div>
+      <div class="row" id="pv-avg-r" style="display:none"><span class="row-l">New avg cost</span><span class="row-v" id="pv-avg">—</span></div>
+      <div class="row" id="pv-pl-r" style="display:none"><span class="row-l">Est. P&L</span><span class="row-v" id="pv-pl">—</span></div>
+    </div>
+  </div>
+  <button class="btn btn-p" onclick="saveTrade()">Save Trade</button>
+</div>
+
+<!-- ══ INVEST ══ -->
+<div id="pg-invest" class="page">
+  <div class="ph">
+    <div class="ph-top">
+      <div><h1>投資</h1><div class="ph-sub">Holdings & P&L</div></div>
+      <div class="dd-wrap">
+        <button class="dd-btn" onclick="toggleDD('inv-dd')">
+          <span class="src-dot" id="inv-dot" style="background:var(--all)"></span>
+          <span id="inv-lbl">匯總</span><span class="dd-arr">▾</span>
+        </button>
+        <div class="dd-menu" id="inv-dd">
+          <div class="dd-opt active" onclick="setISrc('all')"><span class="src-dot" style="background:var(--all)"></span>匯總</div>
+          <div class="dd-opt" onclick="setISrc('me')"><span class="src-dot" style="background:var(--me)"></span>Me</div>
+          <div class="dd-opt" onclick="setISrc('ane')"><span class="src-dot" style="background:var(--ane)"></span>Ane</div>
+          <div class="dd-opt" onclick="setISrc('odosan')"><span class="src-dot" style="background:var(--od)"></span>Odosan</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sg" id="inv-stats"></div>
+  <div class="card">
+    <div class="card-hd">
+      <span class="card-t">持倉 Open Positions</span>
+      <button class="btn btn-s btn-sm" onclick="refreshPrices()">↻ 股價</button>
+    </div>
+    <div class="card-body"><div class="hlist" id="inv-hold"></div></div>
+  </div>
+  <div class="card">
+    <div class="card-hd"><span class="card-t">賣出歷史</span></div>
+    <div class="card-body" id="inv-sold"></div>
+  </div>
+</div>
+
+<!-- ══ SETTINGS ══ -->
+<div id="pg-more" class="page">
+  <div class="ph"><h1>設定</h1><div class="ph-sub" id="settings-ver">v5.7 · Connection & preferences</div></div>
 
   <div class="card">
-    <div class="clabel">懲罰任務卡</div>
-    <div class="togrow">
-      <span style="font-size:14px;font-weight:600">抽到要有後果 😈</span>
-      <button class="tog on" id="pTog" onclick="toggleP()"></button>
+    <div class="card-hd"><span class="card-t">Google Sheets 連接</span></div>
+    <div class="card-body">
+      <div class="fs"><label class="fl">Apps Script Web App URL</label>
+        <input class="fi" id="s-url" placeholder="https://script.google.com/macros/s/…/exec" style="font-size:11.5px"></div>
+      <div class="fs"><label class="fl">Finnhub API Key</label>
+        <input class="fi" id="s-key" placeholder="從 finnhub.io 免費取得"></div>
+      <button class="btn btn-p" onclick="saveAndTest()" style="margin-bottom:8px">Save & Test Connection</button>
+      <div id="conn-st" style="font-size:12px;color:var(--txt2);margin-top:4px"></div>
     </div>
-    <div id="pSec">
-      <div class="irow" style="margin-top:10px">
-        <input id="pInput" type="text" placeholder="加懲罰..." maxlength="20">
-        <button class="badd" onclick="addPunish()">＋</button>
+  </div>
+
+  <div class="card" style="margin-top:10px">
+    <div class="card-hd"><span class="card-t">利率設定 Interest Rates</span></div>
+    <div class="card-body">
+      <div class="alert ai" style="margin-bottom:10px">RBA現金利率自動抓取。各來源可設額外 offset（正/負）。</div>
+      <div style="margin-bottom:10px">
+        <div style="font-size:11.5px;color:var(--txt2);margin-bottom:6px">RBA Rate: <span class="rba-chip" id="s-rba-chip">—</span></div>
       </div>
-      <div class="ptags" id="pTags"></div>
+      <div class="fr2 fs">
+        <div><label class="fl">Me Offset %</label><input type="number" class="fi" id="s-me-off" placeholder="+0.50" step="0.1"></div>
+        <div><label class="fl">Ane Offset %</label><input type="number" class="fi" id="s-ane-off" placeholder="+0.50" step="0.1"></div>
+      </div>
+      <div class="fr2 fs">
+        <div><label class="fl">Odosan Offset %</label><input type="number" class="fi" id="s-od-off" placeholder="0" step="0.1"></div>
+        <div><label class="fl">Manual Override % (0=use RBA)</label><input type="number" class="fi" id="s-manual-rate" placeholder="0" step="0.1"></div>
+      </div>
+      <button class="btn btn-s" onclick="saveRateSettings()">Save Rate Settings</button>
     </div>
   </div>
 
-  <div class="rarea" id="rArea">
-    <div class="rempty"><div class="rei">🎁</div><div class="reh">點選寶箱揭曉答案</div></div>
+  <div class="card" style="margin-top:10px">
+    <div class="card-hd"><span class="card-t">匯率 Exchange Rates</span></div>
+    <div class="card-body">
+      <div class="alert ai" style="margin-bottom:10px;font-size:11.5px">💡 按 ⇄ 切換顯示反向匯率，方便對照。匯率從 open.er-api.com 自動抓取。</div>
+      <!-- AUD/USD -->
+      <div style="margin-bottom:12px">
+        <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px">
+          <span id="audusd-label" style="font-size:10px;color:var(--txt2);text-transform:uppercase;letter-spacing:.5px;min-width:80px">AUD/USD</span>
+          <button onclick="flipRate('audusd')" style="background:var(--bg4);border:1px solid var(--line2);color:var(--teal);padding:2px 8px;border-radius:6px;font-size:11px;cursor:pointer;font-family:var(--sans)">⇄ Flip</button>
+          <span id="audusd-hint" style="font-size:11px;color:var(--txt3)"></span>
+        </div>
+        <input type="number" class="fi" id="s-audusd" step="0.0001" oninput="updateRateHint('audusd')">
+      </div>
+      <!-- EUR/USD -->
+      <div style="margin-bottom:12px">
+        <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px">
+          <span id="eurusd-label" style="font-size:10px;color:var(--txt2);text-transform:uppercase;letter-spacing:.5px;min-width:80px">EUR/USD</span>
+          <button onclick="flipRate('eurusd')" style="background:var(--bg4);border:1px solid var(--line2);color:var(--teal);padding:2px 8px;border-radius:6px;font-size:11px;cursor:pointer;font-family:var(--sans)">⇄ Flip</button>
+          <span id="eurusd-hint" style="font-size:11px;color:var(--txt3)"></span>
+        </div>
+        <input type="number" class="fi" id="s-eurusd" step="0.0001" oninput="updateRateHint('eurusd')">
+      </div>
+      <!-- AUD/CNY (new) -->
+      <div style="margin-bottom:12px">
+        <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px">
+          <span id="audcny-label" style="font-size:10px;color:var(--txt2);text-transform:uppercase;letter-spacing:.5px;min-width:80px">AUD/CNY</span>
+          <button onclick="flipRate('audcny')" style="background:var(--bg4);border:1px solid var(--line2);color:var(--teal);padding:2px 8px;border-radius:6px;font-size:11px;cursor:pointer;font-family:var(--sans)">⇄ Flip</button>
+          <span id="audcny-hint" style="font-size:11px;color:var(--txt3)"></span>
+        </div>
+        <input type="number" class="fi" id="s-audcny" step="0.0001" oninput="updateRateHint('audcny')">
+      </div>
+      <button class="btn btn-s" onclick="fetchRates()" style="margin-bottom:8px">↻ Auto-fetch Live Rates</button>
+      <button class="btn btn-s" onclick="saveRatesManual()">Save Manual Rates</button>
+    </div>
   </div>
-  <button class="bplay" id="playBtn" onclick="mainAct()">請先加入選項</button>
-  <div class="brow">
-    <button class="bsec" onclick="resetRound()">重設</button>
-    <button class="bsec" onclick="shareApp()">📤 分享</button>
+
+  <div class="card" style="margin-top:10px">
+    <div class="card-hd"><span class="card-t">股票代碼</span></div>
+    <div class="card-body">
+      <div class="ttags" id="tickers-wrap"></div>
+      <div class="fr2">
+        <input class="fi" id="new-tick" placeholder="e.g. NVDA" oninput="this.value=this.value.toUpperCase()" style="font-size:13px">
+        <button class="btn btn-s" onclick="addTicker()">Add</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:10px">
+    <div class="card-hd"><span class="card-t">Data</span></div>
+    <div class="card-body">
+      <div class="alert ai" style="margin-bottom:10px;font-size:11.5px">每次打開 app 從 Google Sheets 載入數據。新增操作即時同步。匯入 JSON 後請按 Push All 確保上傳。</div>
+      <button class="btn btn-p" onclick="pushAllToSheets()" style="margin-bottom:8px">⬆️ Push All Data to Sheets（重要！）</button>
+      <button class="btn btn-s" onclick="exportBackup()" style="margin-bottom:8px">Export JSON Backup</button>
+      <button class="btn btn-s" onclick="exportExcel()" style="margin-bottom:8px">Export Excel (.csv)</button>
+      <button class="btn btn-s" onclick="document.getElementById('imp').click()" style="margin-bottom:8px">Import JSON (merge)</button>
+      <input type="file" id="imp" accept=".json" style="display:none" onchange="importBackup(event)">
+      <button class="btn btn-r" onclick="resetAll()">Reset All Local Data</button>
+    </div>
   </div>
 </div>
 
-<!-- Finger overlay -->
-<div id="fgOv">
-  <div class="fg-hdr">
-    <button class="fg-back" id="fgBack">← 返回</button>
-    <div class="fg-ttl">👆 手指抽籤</div>
-  </div>
-  <div class="fg-bdy">
-    <div class="fg-hint">每人放一隻手指喺一格，≥2人後按「開始」</div>
-    <div class="fg-cnt" id="fgCnt">等緊大家放手指...</div>
-    <div class="fg-grid" id="fgGrid"></div>
-    <div class="fg-res" id="fgRes"><p>🎉 先手係</p><strong id="fgWin"></strong></div>
-    <button class="fg-start" id="fgBtn">🎲 開始抽籤</button>
+<!-- NAV -->
+<nav class="nav">
+  <button class="nb active" onclick="showPage('dash',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    總覽
+  </button>
+  <button class="nb" onclick="showPage('funds',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+    資金
+  </button>
+  <button class="nb fab" onclick="showPage('add',this)">
+    <div class="fc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+  </button>
+  <button class="nb" onclick="showPage('invest',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+    投資
+  </button>
+  <button class="nb" onclick="showPage('more',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+    設定
+  </button>
+</nav>
+
+<!-- MODALS -->
+<div class="overlay" id="m-fund" onclick="closeModal('m-fund')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="mh"></div><div class="mt">新增資金記錄</div>
+    <div class="fs"><label class="fl">類型 <span style="font-size:10px;color:var(--txt3)">（來源已體現是否借入）</span></label>
+      <select class="fi" id="fe-type" onchange="toggleCNYFields()">
+        <option value="in">入金 AUD Capital In</option>
+        <option value="cny-pool">人民幣資金池 CNY Pool（記帳用）</option>
+        <option value="repay-full">全額還款（停止計息）</option>
+        <option value="repay-partial">部分還款</option>
+        <option value="out">出金 Capital Out</option>
+      </select></div>
+    <div class="fr2 fs">
+      <div><label class="fl">來源</label>
+        <select class="fi" id="fe-src">
+          <option value="me">Me</option><option value="ane">Ane</option><option value="odosan">Odosan</option>
+        </select></div>
+      <div><label class="fl">Date</label><input type="date" class="fi" id="fe-date"></div>
+    </div>
+    <div class="fr2 fs">
+      <div><label class="fl">Amount</label><input type="number" class="fi" id="fe-amt" placeholder="0.00" oninput="updateFundPreview()"></div>
+      <div><label class="fl">Currency</label>
+        <select class="fi" id="fe-cur" onchange="toggleCNYFields()">
+          <option value="AUD">AUD</option><option value="CNY">CNY 人民幣</option><option value="USD">USD</option>
+        </select></div>
+    </div>
+    <!-- CNY Pool info (type=cny-pool) -->
+    <div id="cny-pool-info" style="display:none">
+      <div class="alert ai" style="margin-bottom:10px">📦 只係記帳，唔計息。之後每次換匯，到「借款記錄」撳「換匯」按鈕新增。</div>
+    </div>
+    <div class="fs"><label class="fl">Notes</label><input class="fi" id="fe-notes" placeholder="…"></div>
+    <div class="btn-row">
+      <button class="btn btn-s" onclick="closeFundModal()">Cancel</button>
+      <button class="btn btn-p" onclick="saveFund()">Save</button>
+    </div>
   </div>
 </div>
 
-<!-- Celeb -->
-<div id="celeb" onclick="closeCeleb()">
-  <canvas id="ccanvas"></canvas>
-  <div class="cbox">
-    <div class="clbl">🎉 今晚就係</div>
-    <div class="cwin" id="cWin"></div>
-    <div class="cpun" id="cPun" style="display:none"></div>
-    <button class="cclose" onclick="closeCeleb(event)">點擊關閉</button>
+<!-- CNY Conversion Modal -->
+<div class="overlay" id="m-cny-convert" onclick="closeModal('m-cny-convert')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="mh"></div>
+    <div class="mt">換匯記錄</div>
+    <div class="alert ai" style="margin-bottom:12px">
+      CNY Pool: <span id="cny-pool-label" style="font-weight:700"></span><br>
+      已換: <span id="cny-already-converted" style="color:var(--warn)"></span><br>
+      剩餘未換: <span id="cny-remaining" style="color:var(--up);font-weight:700"></span>
+    </div>
+    <div class="fr2 fs">
+      <div><label class="fl">今次換 CNY 金額</label>
+        <input type="number" class="fi" id="cv-cny" placeholder="e.g. 8000" oninput="calcConversion()"></div>
+      <div><label class="fl">匯率 CNY→AUD</label>
+        <input type="number" class="fi" id="cv-rate" placeholder="e.g. 0.204" step="0.0001" oninput="calcConversion()"></div>
+    </div>
+    <div class="fs">
+      <label class="fl">換得 AUD（自動計算，可修改）</label>
+      <input type="number" class="fi" id="cv-aud" placeholder="Auto-calc" step="0.01">
+    </div>
+    <div class="fs"><label class="fl">換匯日期（計息從此日起）</label>
+      <input type="date" class="fi" id="cv-date"></div>
+    <div class="fs"><label class="fl">Notes</label>
+      <input class="fi" id="cv-notes" placeholder="e.g. Wise transfer"></div>
+    <div class="btn-row">
+      <button class="btn btn-s" onclick="closeModal('m-cny-convert')">Cancel</button>
+      <button class="btn btn-p" onclick="saveConversion()">Save 換匯</button>
+    </div>
   </div>
 </div>
-<!-- Bottom tab bar -->
-<div class="btab-bar">
-  <button class="btab on" id="tabChest" onclick="setMode('chest')">
-    <span class="btic">🎁</span>寶箱
-  </button>
-  <button class="btab" id="tabElim" onclick="setMode('elim')">
-    <span class="btic">🎡</span>淘汰轉盤
-  </button>
-  <button class="btab" id="tabDice" onclick="setMode('dice')">
-    <span class="btic">🎲</span>骰子
-  </button>
-  <button class="btab" id="tabFinger" onclick="setMode('finger')">
-    <span class="btic">👆</span>手指抽籤
-  </button>
+
+<div class="overlay" id="m-stock" onclick="closeModal('m-stock')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="mh"></div>
+    <div class="mt" id="m-stock-title">Stock</div>
+    <div id="m-stock-body"></div>
+    <button class="btn btn-s" onclick="closeModal('m-stock')" style="margin-top:14px">Close</button>
+  </div>
+</div>
+
+<!-- Interest Payment Modal -->
+<div class="overlay" id="m-int-pay" onclick="closeModal('m-int-pay')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="mh"></div>
+    <div class="mt" id="m-int-pay-title">記錄利息支付</div>
+    <div class="alert ai" style="margin-bottom:12px;font-size:12px">
+      應計利息：<span id="ip-accrued" style="font-weight:700;color:var(--warn)"></span><br>
+      已付利息：<span id="ip-paid" style="color:var(--up)"></span><br>
+      未付餘額：<span id="ip-remaining" style="font-weight:700;color:var(--dn)"></span>
+    </div>
+    <div class="fr2 fs">
+      <div><label class="fl">來源</label>
+        <select class="fi" id="ip-src">
+          <option value="me">Me</option><option value="ane">Ane</option><option value="odosan">Odosan</option>
+        </select></div>
+      <div><label class="fl">支付日期</label>
+        <input type="date" class="fi" id="ip-date"></div>
+    </div>
+    <div class="fr2 fs">
+      <div><label class="fl">支付金額 (AUD)</label>
+        <input type="number" class="fi" id="ip-amount" placeholder="0.00" step="0.01"></div>
+      <div><label class="fl">Currency</label>
+        <select class="fi" id="ip-cur">
+          <option value="AUD">AUD</option><option value="CNY">CNY</option><option value="USD">USD</option>
+        </select></div>
+    </div>
+    <div class="fs"><label class="fl">Notes</label>
+      <input class="fi" id="ip-notes" placeholder="e.g. Monthly interest to Ane"></div>
+    <div class="btn-row">
+      <button class="btn btn-s" onclick="closeModal('m-int-pay')">Cancel</button>
+      <button class="btn btn-p" onclick="saveInterestPay()">Save</button>
+    </div>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-// ── COLORS ──
-const C=['#F97316','#F43F5E','#8B5CF6','#06B6D4','#10B981','#F59E0B','#3B82F6','#EC4899','#14B8A6','#EF4444'];
+// ══════════════════════════════════════════════════
+// CONSTANTS
+// ══════════════════════════════════════════════════
+const VERSION = 'v6.0';
+const SC = {me:'var(--me)',ane:'var(--ane)',odosan:'var(--od)',all:'var(--all)'};
+const SL = {me:'Me',ane:'Ane',odosan:'Odosan',all:'匯總'};
+const SP = {me:'pm',ane:'pa',odosan:'po',all:'px'};
+const SRC_EMOJI = {me:'👤',ane:'💜',odosan:'💚'};
 
-// ── ALL VARS UP FRONT (avoid let/const hoisting issues) ──
-const CHEST_EM=['🎁','📦','🧧','🪄','🎊','💎','🎀','🏺','🎈','🎉','⭐','🌟'];
-const FG_EM=['🐶','🐱','🐸','🐼','🦊','🐨','🐯','🦁','🐻','🐺','🦄','🐙'];
-let chestItems=[];
-let ePool=[],eElim=[],eAngle=0,eSpinning=false,eDone=false;
-let dRunning=false;
-let fgT={},fgDone=false;
-let cfAF=null;
+// ══════════════════════════════════════════════════
+// DB
+// ══════════════════════════════════════════════════
+let DB = {
+  trades: [],
+  funds: [],
+  interestPayments: [], // {id, date, source, amount, currency, notes}
+  prices: {},
+  rates: {},
+  settings: {
+    scriptUrl:  'https://script.google.com/macros/s/AKfycbwWWK5Go-fj3BWJDxetCCQbaWKouNWbyqm6MoeDy3ys3yr5DpnoAh_sqKIGr5StZ1GivQ/exec',
+    finnhubKey: 'd7q5ovhr01qosaaqnhh0d7q5ovhr01qosaaqnhhg',
+    audUsd:0.635, eurUsd:1.08, cnyAud:0.215, audCny:4.65,
+    rbaRate: 4.35,
+    rbaUpdated: '',
+    meOffset:0.5, aneOffset:0.5, odosanOffset:0,
+    manualRate:0,
+    tickers:['PLTR','TEM','NVDA','RBLX','ISRG','AVAV','META','TSLA','GOOG','MSFT','TSM','HY9H','BKR.B'],
+    lastSync: null
+  }
+};
 
-// ── STATE ──
-const LSK='fmp4'; // new key avoids old cache conflicts
-let S={items:['火鍋','燒烤','壽司','川菜','泰國菜','茶餐廳'],weights:{},punishments:['請大家飲奶茶','負責訂位','發搞笑限動','講一個冷笑話','下次你揀'],usePunish:true,useWeight:false,mode:'chest'};
-
-function save(){try{localStorage.setItem(LSK,JSON.stringify(S))}catch(e){}}
+function save(){ localStorage.setItem('tc5', JSON.stringify(DB)); }
 function load(){
+  const r=localStorage.getItem('tc5');
+  if(!r) return;
   try{
-    const r=localStorage.getItem(LSK);
-    if(r){
-      const d=JSON.parse(r);
-      // Guard: only merge valid data
-      if(d.items && Array.isArray(d.items) && d.items.length>=2) S.items=d.items;
-      if(d.weights && typeof d.weights==='object') S.weights=d.weights;
-      if(d.punishments && Array.isArray(d.punishments) && d.punishments.length>0) S.punishments=d.punishments;
-      if(typeof d.usePunish==='boolean') S.usePunish=d.usePunish;
-      if(typeof d.useWeight==='boolean') S.useWeight=d.useWeight;
-      if(typeof d.mode==='string') S.mode=d.mode;
+    const saved=JSON.parse(r);
+    // Deep merge settings so defaults aren't lost
+    DB.trades      = saved.trades      || [];
+    DB.funds       = saved.funds       || [];
+    DB.interestPayments = saved.interestPayments || [];
+    DB.prices      = saved.prices      || {};
+    DB.rates       = saved.rates       || {};
+    // Merge settings carefully — keep defaults for missing keys
+    if(saved.settings){
+      DB.settings = { ...DB.settings, ...saved.settings };
+      // Ensure rbaRate is always a valid number
+      if(!DB.settings.rbaRate || isNaN(parseFloat(DB.settings.rbaRate))) DB.settings.rbaRate = 4.35;
     }
-  }catch(e){}
-  // Load from URL share
-  try{
-    const p=new URLSearchParams(location.search);
-    if(p.get('d')){
-      const d=JSON.parse(decodeURIComponent(atob(p.get('d'))));
-      if(d.items&&d.items.length>=2) S.items=d.items;
-      if(d.punishments&&d.punishments.length>0) S.punishments=d.punishments;
+  }catch(e){ console.warn('Load error:', e); }
+}
+
+// ══════════════════════════════════════════════════
+// INTEREST CALCULATION (Daily Compound)
+// ══════════════════════════════════════════════════
+function getRate(source) {
+  const s = DB.settings;
+  const base = s.manualRate > 0 ? s.manualRate : (s.rbaRate || 4.35);
+  const offset = source==='me' ? (s.meOffset||0) : source==='ane' ? (s.aneOffset||0) : (s.odosanOffset||0);
+  return (base + offset) / 100; // annual decimal
+}
+
+// Calculate compound interest for one fund entry up to today (or closedDate)
+// Safe date parser — fixes NaN days bug
+function parseDate(str) {
+  if(!str) return new Date();
+  // Handle both YYYY-MM-DD and DD/MM/YYYY
+  if(typeof str === 'string' && str.includes('/')) {
+    const parts = str.split('/');
+    return new Date(parts[2]+'-'+parts[1].padStart(2,'0')+'-'+parts[0].padStart(2,'0'));
+  }
+  const d = new Date(str);
+  return isNaN(d.getTime()) ? new Date() : d;
+}
+
+function calcFundInterest(fund) {
+  // CNY funds don't accrue interest until converted to AUD
+  if((fund.currency||'AUD')==='CNY' && !fund.convertedDate) return 0;
+  const annualRate = getRate(fund.source);
+  if(annualRate <= 0) return 0;
+  // Use convertedDate as start if CNY converted, else startDate/date
+  const startStr = fund.convertedDate || fund.startDate || fund.date;
+  const startDate = parseDate(startStr);
+  const endDate   = fund.closed ? parseDate(fund.closedDate) : new Date();
+  const days      = Math.max(0, (endDate - startDate) / 86400000);
+  const principal = toAUD(fund.amount, fund.currency||'AUD');
+  // Daily compound: P × (1 + r/365)^days - P
+  return principal * (Math.pow(1 + annualRate/365, days) - 1);
+}
+
+// Get active fund entries per source (loan-in and in types generate interest)
+function getInterestEntries(src) {
+  const sources = src === 'all' ? ['me','ane','odosan'] : [src];
+  return DB.funds
+    .filter(f => sources.includes(f.source) && (f.type==='in'||f.type==='loan-in'||f.type==='cny-convert'))
+    .map(f => {
+      const isCNY = (f.currency||'AUD')==='CNY' && !f.convertedDate;
+      const startStr = f.convertedDate || f.startDate || f.date;
+      const startD   = parseDate(startStr);
+      const endD     = f.closed ? parseDate(f.closedDate) : new Date();
+      const days     = Math.max(0, Math.round((endD - startD) / 86400000));
+      return {
+        ...f,
+        interest:  isCNY ? 0 : calcFundInterest(f),
+        principal: toAUD(f.amount, f.currency||'AUD'),
+        rate:      (getRate(f.source)*100).toFixed(2),
+        days,
+        pendingCNY: isCNY
+      };
+    });
+}
+
+// ══════════════════════════════════════════════════
+// SHEETS API
+// ══════════════════════════════════════════════════
+async function sheetsCall(action, body={}) {
+  const url = DB.settings.scriptUrl;
+  if(!url) throw new Error('No Script URL');
+  return new Promise((resolve, reject) => {
+    const cbName = 'cb_' + Date.now();
+    const params = new URLSearchParams({
+      action,
+      payload: JSON.stringify(body),
+      callback: cbName
+    });
+    const script = document.createElement('script');
+    script.src = url + '?' + params.toString();
+    window[cbName] = (data) => {
+      delete window[cbName];
+      document.body.removeChild(script);
+      if(data.ok) resolve(data.data);
+      else reject(new Error(data.error||'Error'));
+    };
+    script.onerror = () => {
+      delete window[cbName];
+      document.body.removeChild(script);
+      reject(new Error('Network error'));
+    };
+    setTimeout(() => {
+      if(window[cbName]) {
+        delete window[cbName];
+        try{ document.body.removeChild(script); }catch(e){}
+        reject(new Error('Timeout'));
+      }
+    }, 8000);
+    document.body.appendChild(script);
+  });
+}
+
+// ══════════════════════════════════════════════════
+// SYNC QUEUE — reliable write-back to Sheets
+// ══════════════════════════════════════════════════
+let syncQueue = []; // pending operations that failed to push
+let syncLoaded = false; // only start auto-push after initial load
+
+function queueSync(action, body) {
+  // Attempt immediately
+  if(DB.settings.scriptUrl && syncLoaded) {
+    sheetsCall(action, body).catch(() => {
+      // Failed — add to retry queue
+      syncQueue.push({ action, body, ts: Date.now() });
+      setSS('busy', `⟳ ${syncQueue.length} 筆待同步…`);
+    });
+  } else if(DB.settings.scriptUrl) {
+    // Not loaded yet — queue for later
+    syncQueue.push({ action, body, ts: Date.now() });
+  }
+}
+
+async function flushSyncQueue() {
+  if(!DB.settings.scriptUrl || syncQueue.length === 0) return;
+  const pending = [...syncQueue];
+  syncQueue = [];
+  let failed = 0;
+  for(const op of pending) {
+    try { await sheetsCall(op.action, op.body); }
+    catch(e) { syncQueue.push(op); failed++; }
+  }
+  if(failed === 0 && pending.length > 0) {
+    setSS('ok', `✓ ${DB.trades.length} trades synced`, new Date().toLocaleTimeString());
+  } else if(failed > 0) {
+    setSS('busy', `⟳ ${syncQueue.length} 筆待同步…`);
+  }
+}
+
+// Auto-flush every 3 minutes
+setInterval(flushSyncQueue, 3 * 60 * 1000);
+// Also flush when page becomes visible again (return from background)
+document.addEventListener('visibilitychange', () => {
+  if(!document.hidden) flushSyncQueue();
+});
+let appReady = true; // always allow UI interaction; sync is best-effort
+
+async function syncFromSheets() {
+  setSS('busy', 'Loading from Google Sheets…');
+  try {
+    const data = await sheetsCall('getAllData');
+    const sheetsHasData = (data.trades && data.trades.length > 0) ||
+                          (data.funds  && data.funds.length  > 0);
+
+    if(sheetsHasData) {
+      DB.trades = data.trades || [];
+      DB.funds  = data.funds  || [];
+      if(data.prices)   mergePrices(data.prices);
+      if(data.rates)    mergeRates(data.rates);
+      if(data.settings) mergeSettings(data.settings);
+      DB.settings.lastSync = new Date().toISOString();
+      save();
+      setSS('ok', `✓ ${DB.trades.length} trades · ${DB.funds.length} funds`, new Date().toLocaleTimeString());
+    } else {
+      if(data.prices)   mergePrices(data.prices);
+      if(data.rates)    mergeRates(data.rates);
+      if(data.settings) mergeSettings(data.settings);
+      save();
+      setSS('ok', 'Connected — Sheets empty (Push All to upload)', '');
     }
-  }catch(e){}
-  // Ensure weights exist for all items
-  S.items.forEach(it=>{if(!S.weights[it])S.weights[it]=1;});
-  // Never allow finger mode on boot (needs overlay)
-  if(S.mode==='finger') S.mode='chest';
+    return true;
+  } catch(e) {
+    setSS('err', '離線模式 — 本地數據仍可用');
+    return false;
+  }
 }
 
-// ── BOOT ──
-load();
-renderItems(); renderW(); renderP();
-applyMode(S.mode);
+// Guard: warn if offline but don't block UI completely
+function requireReady() {
+  if(!appReady && DB.settings.scriptUrl) {
+    // Allow anyway but show warning — don't lock the whole app
+    toast('⚠️ 雲端未同步，數據可能未保存到 Sheets');
+  }
+  return true; // always allow — data safety handled by sync logic
+}
 
-// ── ITEMS ──
-function addItem(){
-  const v=document.getElementById('iInput').value.trim();
-  if(!v)return;
-  if(!S.items.includes(v)){S.items.push(v);S.weights[v]=1;}
-  document.getElementById('iInput').value='';
-  save();renderItems();renderW();
-  if(S.mode==='chest')buildChests();
-  if(S.mode==='elim'){eReset();buildWheelCanvas();updEInfo();}
-  updBtn();
+function mergePrices(p){ Object.entries(p).forEach(([t,v])=>{ DB.prices[t]=typeof v==='object'?v.price:v; }); }
+function mergeRates(r){
+  if(r.AUDUSD) DB.settings.audUsd=r.AUDUSD;
+  if(r.EURUSD) DB.settings.eurUsd=r.EURUSD;
+  if(r.CNYAUD) DB.settings.cnyAud=r.CNYAUD;
+  if(r.CNYAUD) DB.settings.audCny=1/r.CNYAUD; // AUD/CNY = inverse of CNY/AUD
+  DB.rates=r;
 }
-function removeItem(i){
-  delete S.weights[S.items[i]];S.items.splice(i,1);
-  save();renderItems();renderW();
-  if(S.mode==='chest')buildChests();
-  if(S.mode==='elim'){eReset();buildWheelCanvas();updEInfo();}
-  updBtn();
+function mergeSettings(s){
+  if(s.finnhubKey) DB.settings.finnhubKey=s.finnhubKey;
+  if(s.rbaRate)    DB.settings.rbaRate=parseFloat(s.rbaRate)||4.35;
+  if(s.rbaUpdated) DB.settings.rbaUpdated=s.rbaUpdated;
+  if(s.meOffset!=null)     DB.settings.meOffset=parseFloat(s.meOffset)||0;
+  if(s.aneOffset!=null)    DB.settings.aneOffset=parseFloat(s.aneOffset)||0;
+  if(s.odosanOffset!=null) DB.settings.odosanOffset=parseFloat(s.odosanOffset)||0;
+  if(s.tickers) try{ DB.settings.tickers=JSON.parse(s.tickers); }catch(e){}
 }
-function renderItems(){
-  document.getElementById('tagsEl').innerHTML=S.items.map((it,i)=>
-    `<span class="tag">${it}${S.useWeight&&(S.weights[it]||1)>1?`<span class="tagw">x${S.weights[it]}</span>`:''}<button class="tx" onclick="removeItem(${i})">✕</button></span>`
-  ).join('');
-  updBtn();
-}
-document.getElementById('iInput').addEventListener('keydown',e=>{if(e.key==='Enter')addItem();});
 
-// ── WEIGHT ──
-function toggleW(){
-  S.useWeight=!S.useWeight;
-  document.getElementById('wTog').className='tog'+(S.useWeight?' on':'');
-  document.getElementById('wPanel').className='wpanel'+(S.useWeight?' open':'');
-  save();renderItems();renderW();
+function setSS(state,msg,time=''){
+  document.getElementById('sdot').className='sdot '+state;
+  document.getElementById('stxt').textContent=msg;
+  document.getElementById('stime').textContent=time;
 }
-function chgW(n,d){S.weights[n]=Math.max(1,Math.min(5,(S.weights[n]||1)+d));save();renderW();renderItems();}
-function renderW(){
-  const mx=Math.max(...S.items.map(it=>S.weights[it]||1),1);
-  document.getElementById('wPanel').innerHTML=S.items.map(it=>{
-    const w=S.weights[it]||1;
-    return `<div class="wrow"><span class="wname">${it}</span><div class="wbar-wrap"><div class="wbar" style="width:${Math.round(w/mx*100)}%"></div></div><button class="wbtn" onclick="chgW(${JSON.stringify(it)},-1)">−</button><span class="wval">${w}</span><button class="wbtn" onclick="chgW(${JSON.stringify(it)},1)">＋</button></div>`;
+
+// ══════════════════════════════════════════════════
+// RBA RATE
+// ══════════════════════════════════════════════════
+async function fetchRBA() {
+  updateRBAChips('…');
+  if(DB.settings.scriptUrl) {
+    try {
+      const r = await sheetsCall('getRBARate');
+      if(r.rate) {
+        DB.settings.rbaRate = parseFloat(r.rate);
+        DB.settings.rbaUpdated = r.updatedAt || new Date().toISOString();
+        save(); updateRBAChips(DB.settings.rbaRate+'%');
+        toast('RBA rate updated: '+DB.settings.rbaRate+'%');
+        return;
+      }
+    } catch(e) {}
+  }
+  // Direct fallback
+  try {
+    const r = await fetch('https://data.api.rba.gov.au/v1/series/FIRMMCRI/data?format=json&limit=1');
+    const d = await r.json();
+    const val = d?.data?.dataSets?.[0]?.observations?.['0']?.['0']?.[0];
+    if(val) {
+      DB.settings.rbaRate = parseFloat(val);
+      DB.settings.rbaUpdated = new Date().toISOString();
+      save(); updateRBAChips(DB.settings.rbaRate+'%');
+      toast('RBA rate: '+DB.settings.rbaRate+'%'); return;
+    }
+  } catch(e) {}
+  // Static fallback (update manually if needed)
+  toast('使用緩存 RBA 利率: '+DB.settings.rbaRate+'%');
+  updateRBAChips(DB.settings.rbaRate+'%');
+}
+
+function updateRBAChips(val) {
+  ['rba-chip','s-rba-chip'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.textContent=val;
+  });
+  const updEl=document.getElementById('rba-updated');
+  if(updEl&&DB.settings.rbaUpdated) updEl.textContent='Updated '+new Date(DB.settings.rbaUpdated).toLocaleDateString('en-AU');
+}
+
+// ══════════════════════════════════════════════════
+// INTEREST PAYMENTS
+// ══════════════════════════════════════════════════
+function openInterestPayModal(editId){
+  // Calculate accrued vs paid for selected source
+  const src = fSrc==='all' ? 'all' : fSrc;
+  const accrued = getInterestEntries(src).reduce((s,e)=>s+e.interest,0);
+  const paid = (DB.interestPayments||[])
+    .filter(p=>src==='all'||p.source===src)
+    .reduce((s,p)=>s+toAUD(p.amount,p.currency||'AUD'),0);
+  const remaining = accrued - paid;
+
+  document.getElementById('ip-accrued').textContent = 'A$'+fmt(accrued);
+  document.getElementById('ip-paid').textContent    = 'A$'+fmt(paid);
+  document.getElementById('ip-remaining').textContent = 'A$'+fmt(remaining);
+  document.getElementById('ip-src').value   = fSrc==='all'?'ane':fSrc;
+  document.getElementById('ip-date').value  = today();
+  document.getElementById('ip-amount').value = '';
+  document.getElementById('ip-cur').value   = 'AUD';
+  document.getElementById('ip-notes').value = '';
+
+  const modal = document.getElementById('m-int-pay');
+  modal.dataset.editId = editId||'';
+  document.getElementById('m-int-pay-title').textContent = editId?'編輯利息支付':'記錄利息支付';
+
+  if(editId){
+    const p=DB.interestPayments.find(x=>x.id===editId);
+    if(p){
+      document.getElementById('ip-src').value    = p.source;
+      document.getElementById('ip-date').value   = toInputDate(p.date);
+      document.getElementById('ip-amount').value = p.amount;
+      document.getElementById('ip-cur').value    = p.currency||'AUD';
+      document.getElementById('ip-notes').value  = p.notes||'';
+    }
+  }
+  openModal('m-int-pay');
+}
+
+async function saveInterestPay(){
+  const src    = document.getElementById('ip-src').value;
+  const date   = document.getElementById('ip-date').value;
+  const amount = document.getElementById('ip-amount').value;
+  const cur    = document.getElementById('ip-cur').value;
+  const notes  = document.getElementById('ip-notes').value;
+  if(!amount||!date){toast('Fill amount and date');return;}
+  const editId = document.getElementById('m-int-pay').dataset.editId||'';
+  const pay={id:editId||Date.now()+'',source:src,date,amount,currency:cur,notes,createdAt:new Date().toISOString()};
+  if(!DB.interestPayments) DB.interestPayments=[];
+  if(editId){
+    const idx=DB.interestPayments.findIndex(x=>x.id===editId);
+    if(idx>=0) DB.interestPayments[idx]=pay; else DB.interestPayments.push(pay);
+  } else { DB.interestPayments.push(pay); }
+  save();
+  // Push to Sheets as a special fund record type
+  queueSync('saveFund',{fund:{...pay,type:'interest-pay',currency:cur,closed:'',closedDate:'',startDate:date,convertedDate:'',cnyPoolId:'',cnyAmount:'',cnyOriginal:'',amount}});
+  closeModal('m-int-pay');
+  renderInterestDetail();
+  toast(editId?'已更新 ✓':'利息支付記錄已保存 ✓');
+}
+
+function deleteInterestPay(id){
+  if(!confirm('刪除此利息支付記錄？'))return;
+  DB.interestPayments=(DB.interestPayments||[]).filter(x=>x.id!==id);
+  save(); renderInterestDetail(); toast('已刪除 ✓');
+}
+// ══════════════════════════════════════════════════
+const rateFlipped = { audusd: false, eurusd: false, audcny: false };
+
+function flipRate(which){
+  rateFlipped[which] = !rateFlipped[which];
+  const input = document.getElementById('s-'+which);
+  const label = document.getElementById(which+'-label');
+  const val = parseFloat(input.value)||0;
+  if(val > 0) input.value = (1/val).toFixed(4);
+  const labels = {
+    audusd: ['AUD/USD','USD/AUD (flipped)'],
+    eurusd: ['EUR/USD','USD/EUR (flipped)'],
+    audcny: ['AUD/CNY','CNY/AUD (flipped)']
+  };
+  label.textContent = rateFlipped[which] ? labels[which][1] : labels[which][0];
+  updateRateHint(which);
+}
+
+function updateRateHint(which){
+  const input = document.getElementById('s-'+which);
+  const hint  = document.getElementById(which+'-hint');
+  if(!hint) return;
+  const val = parseFloat(input.value)||0;
+  if(!val){ hint.textContent=''; return; }
+  const hints = {
+    audusd: [`→ 1 USD = A$${(1/val).toFixed(4)}`, `→ 1 AUD = $${(1/val).toFixed(4)}`],
+    eurusd: [`→ 1 USD = €${(1/val).toFixed(4)}`, `→ 1 EUR = $${(1/val).toFixed(4)}`],
+    audcny: [`→ 1 CNY = A$${(1/val).toFixed(4)}`, `→ 1 AUD = ¥${(1/val).toFixed(4)}`],
+  };
+  hint.textContent = rateFlipped[which] ? hints[which][1] : hints[which][0];
+}
+
+function saveRatesManual(){
+  let audVal = parseFloat(document.getElementById('s-audusd').value)||0;
+  let eurVal = parseFloat(document.getElementById('s-eurusd').value)||0;
+  let cnyVal = parseFloat(document.getElementById('s-audcny').value)||0;
+  if(rateFlipped.audusd && audVal>0) audVal = 1/audVal;
+  if(rateFlipped.eurusd && eurVal>0) eurVal = 1/eurVal;
+  if(rateFlipped.audcny && cnyVal>0) cnyVal = 1/cnyVal;
+  if(audVal>0) DB.settings.audUsd = audVal;
+  if(eurVal>0) DB.settings.eurUsd = eurVal;
+  if(cnyVal>0) DB.settings.audCny = cnyVal;
+  // Also update cnyAud (CNY→AUD = 1/audCny)
+  if(cnyVal>0) DB.settings.cnyAud = 1/cnyVal;
+  save(); toast('Rates saved ✓'); initSettingsForm();
+}
+
+// ══════════════════════════════════════════════════
+// EXCHANGE RATES
+// ══════════════════════════════════════════════════
+async function fetchRates() {
+  if(DB.settings.scriptUrl) {
+    try { const r=await sheetsCall('getRates'); mergeRates(r); save(); initSettingsForm(); toast('Rates updated ✓'); return; }
+    catch(e) {}
+  }
+  try {
+    const r=await fetch('https://open.er-api.com/v6/latest/USD');
+    const d=await r.json();
+    if(d.result==='success'){
+      mergeRates({AUDUSD:1/d.rates.AUD,EURUSD:1/d.rates.EUR,source:'er-api'});
+      save(); initSettingsForm(); toast('Rates updated ✓');
+    }
+  } catch(e){ toast('Rate fetch failed'); }
+}
+
+async function refreshAll() {
+  await syncFromSheets();
+  await fetchRBA();
+  await fetchRates();
+  await refreshPrices();
+  renderCurrentPage();
+}
+
+// ══════════════════════════════════════════════════
+// PRICES
+// ══════════════════════════════════════════════════
+async function refreshPrices() {
+  const {open}=calcHoldings();
+  if(!open.length){ toast('No holdings'); return; }
+  const tickers=open.map(h=>h.ticker);
+  if(DB.settings.scriptUrl) {
+    try {
+      setSS('busy','Fetching prices…');
+      const prices=await sheetsCall('refreshPrices',{tickers,finnhubKey:DB.settings.finnhubKey});
+      Object.entries(prices).forEach(([t,v])=>{ DB.prices[t]=v.price||v; });
+      save(); setSS('ok','Prices updated',new Date().toLocaleTimeString());
+      renderCurrentPage(); toast('Prices updated ✓'); return;
+    } catch(e) {}
+  }
+  const key=DB.settings.finnhubKey;
+  if(!key){ toast('Add Finnhub key in Settings'); return; }
+  let n=0;
+  for(const t of tickers){
+    try{ const r=await fetch(`https://finnhub.io/api/v1/quote?symbol=${t}&token=${key}`); const d=await r.json(); if(d.c&&d.c>0){DB.prices[t]=d.c;n++;} }catch(e){}
+  }
+  save(); renderCurrentPage(); toast(n+' prices refreshed ✓');
+}
+
+// ══════════════════════════════════════════════════
+// CURRENCY HELPERS
+// ══════════════════════════════════════════════════
+function toUSD(a,cur){ a=parseFloat(a)||0; if(cur==='USD')return a; if(cur==='EUR')return a*(DB.settings.eurUsd||1.08); if(cur==='AUD')return a*(DB.settings.audUsd||0.635); if(cur==='CNY')return a*(DB.settings.cnyAud||0.215)*(DB.settings.audUsd||0.635); return a; }
+function toAUD(a,cur){ a=parseFloat(a)||0; if(cur==='AUD')return a; if(cur==='USD')return a/(DB.settings.audUsd||0.635); if(cur==='EUR')return a*(DB.settings.eurUsd||1.08)/(DB.settings.audUsd||0.635); if(cur==='CNY')return a*(DB.settings.cnyAud||0.215); return a; }
+
+// ══════════════════════════════════════════════════
+// HOLDINGS CALC
+// ══════════════════════════════════════════════════
+function calcHoldings(){
+  const byKey={};
+  const allClosed=[]; // all sell events with full detail
+
+  [...DB.trades].sort((a,b)=>a.date<b.date?-1:1).forEach(t=>{
+    if(t.type==='dividend') return;
+    const k=t.ticker+'-'+t.source;
+    if(!byKey[k]) byKey[k]={ticker:t.ticker,source:t.source,shares:0,cost:0};
+    const h=byKey[k];
+    const p=toUSD(t.price,t.currency||'USD');
+    const fee=parseFloat(t.fee)||0;
+    if(t.type==='buy'){
+      h.shares+=parseFloat(t.shares);
+      h.cost+=parseFloat(t.shares)*p+fee;
+    } else if(t.type==='sell'){
+      const avg=h.shares>0?h.cost/h.shares:0;
+      const sellVal=parseFloat(t.shares)*p-fee;
+      const costBasis=parseFloat(t.shares)*avg;
+      const realPL=sellVal-costBasis;
+      allClosed.push({
+        ticker:t.ticker, source:t.source, date:t.date,
+        shares:parseFloat(t.shares), price:p, fee,
+        sellVal, costBasis, realPL, id:t.id
+      });
+      h.shares-=parseFloat(t.shares);
+      h.cost-=parseFloat(t.shares)*avg;
+      if(h.shares<0.0001){h.shares=0;h.cost=0;}
+    }
+  });
+
+  const byTicker={};
+  Object.values(byKey).filter(h=>h.shares>0.0001).forEach(h=>{
+    if(!byTicker[h.ticker]) byTicker[h.ticker]={ticker:h.ticker,srcs:{},totalShares:0,totalCost:0};
+    byTicker[h.ticker].srcs[h.source]={shares:h.shares,cost:h.cost};
+    byTicker[h.ticker].totalShares+=h.shares;
+    byTicker[h.ticker].totalCost+=h.cost;
+  });
+  const open=Object.values(byTicker).map(h=>{
+    const px=DB.prices[h.ticker]||null;
+    return {...h, avgCost:h.totalShares>0?h.totalCost/h.totalShares:0, currentPrice:px,
+      currentValue:px?px*h.totalShares:null,
+      unrealizedPL:px?px*h.totalShares-h.totalCost:null,
+      unrealizedPct:px&&h.totalCost>0?(px*h.totalShares-h.totalCost)/h.totalCost*100:null};
+  });
+  return {open, closed:allClosed};
+}
+
+// Total sell proceeds returned to a source (USD)
+function calcSellProceeds(src){
+  const {closed}=calcHoldings();
+  return closed
+    .filter(c=>src==='all'||c.source===src)
+    .reduce((s,c)=>s+c.sellVal,0);
+}
+
+// ══════════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════════
+let curPage='dash';
+function showPage(pg,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
+  document.getElementById('pg-'+pg).classList.add('active');
+  if(btn)btn.classList.add('active');
+  curPage=pg; closeAllDDs();
+  if(pg==='dash')    renderDash();
+  if(pg==='funds')   renderFunds();
+  if(pg==='invest')  renderInvest();
+  if(pg==='add')     { if(!editTradeId) initAdd(); } // don't reset if editing
+  if(pg==='more')    initSettingsForm();
+}
+function renderCurrentPage(){ document.getElementById('pg-'+curPage)&&showPage(curPage,document.querySelector('.nb.active')); }
+function openFundModal(){
+  const modal=document.getElementById('m-fund');
+  modal.dataset.editId='';
+  document.querySelector('#m-fund .mt').textContent='新增資金記錄';
+  document.getElementById('fe-type').value='in';
+  document.getElementById('fe-src').value='me';
+  document.getElementById('fe-date').value=today();
+  document.getElementById('fe-amt').value='';
+  document.getElementById('fe-cur').value='AUD';
+  document.getElementById('fe-notes').value='';
+  const cpi=document.getElementById('cny-pool-info');
+  if(cpi) cpi.style.display='none';
+  openModal('m-fund');
+}
+
+function closeFundModal(){
+  document.getElementById('m-fund').dataset.editId = '';
+  document.querySelector('#m-fund .mt').textContent = '新增資金記錄';
+  closeModal('m-fund');
+}
+
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function toast(msg,ms=2200){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),ms);}
+function today(){return new Date().toISOString().split('T')[0];}
+function fmt(n,d=2){return(parseFloat(n)||0).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});}
+function fmtS(n){const v=parseFloat(n)||0;return(v>=0?'+':'')+fmt(v);}
+function clr(n){return parseFloat(n)>=0?'var(--up)':'var(--dn)';}
+
+let fSrc='all', iSrc='all', fView='flows';
+function toggleDD(id){closeAllDDs();document.getElementById(id).classList.toggle('open');}
+function closeAllDDs(){document.querySelectorAll('.dd-menu').forEach(m=>m.classList.remove('open'));}
+document.addEventListener('click',e=>{if(!e.target.closest('.dd-wrap'))closeAllDDs();});
+
+function setFSrc(s){fSrc=s;updateDD('fd-dd','fd-dot','fd-lbl',s);closeAllDDs();renderFunds();}
+function setISrc(s){iSrc=s;updateDD('inv-dd','inv-dot','inv-lbl',s);closeAllDDs();renderInvest();}
+function updateDD(ddId,dotId,lblId,src){
+  document.getElementById(dotId).style.background=SC[src];
+  document.getElementById(lblId).textContent=SL[src];
+  document.querySelectorAll('#'+ddId+' .dd-opt').forEach(o=>o.classList.toggle('active',o.textContent.trim()===SL[src]));
+}
+function setFView(v,btn){
+  fView=v;
+  document.querySelectorAll('#pg-funds .seg-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  ['flows','cashflow','interest','alloc'].forEach(id=>{
+    const el=document.getElementById('fv-'+id);
+    if(el) el.style.display=id===v?'':'none';
+  });
+  renderFundsView();
+}
+
+// ══════════════════════════════════════════════════
+// DASHBOARD
+// ══════════════════════════════════════════════════
+function renderDash(){
+  document.getElementById('dash-date').textContent=new Date().toLocaleDateString('en-AU',{weekday:'long',day:'numeric',month:'long'});
+  document.getElementById('ver-badge').textContent=VERSION;
+  const {open,closed}=calcHoldings();
+  let tv=0,tc=0,upl=0;
+  open.forEach(h=>{tc+=h.totalCost;if(h.currentValue!==null){tv+=h.currentValue;upl+=h.unrealizedPL;}else tv+=h.totalCost;});
+  const rl=closed.reduce((s,c)=>s+c.realPL,0);
+  const pct=tc>0?upl/tc*100:0;
+  // Total interest across all sources
+  const allInt=getInterestEntries('all').reduce((s,e)=>s+e.interest,0);
+  const allIntUSD=allInt*(DB.settings.audUsd||0.635);
+  const net=upl+rl-allIntUSD;
+  document.getElementById('d-total').textContent='$'+fmt(tv);
+  document.getElementById('d-total-sub').textContent=`Cost $${fmt(tc)} · ${pct>=0?'+':''}${pct.toFixed(2)}%`;
+  const uel=document.getElementById('d-unreal');uel.textContent=fmtS(upl);uel.style.color=clr(upl);
+  document.getElementById('d-upct').textContent=(pct>=0?'+':'')+pct.toFixed(2)+'%';
+  document.getElementById('d-int').textContent='A$'+fmt(allInt);
+  const nel=document.getElementById('d-net');nel.textContent=fmtS(net);nel.style.color=clr(net);
+  // Source rows
+  document.getElementById('d-src').innerHTML=['me','ane','odosan'].map(src=>{
+    const sh=open.map(h=>{const s=h.srcs[src];if(!s||s.shares<0.0001)return null;const px=h.currentPrice;return{cost:s.cost,val:px?px*s.shares:s.cost,pl:px?px*s.shares-s.cost:0};}).filter(Boolean);
+    const cost=sh.reduce((s,h)=>s+h.cost,0),val=sh.reduce((s,h)=>s+h.val,0),pl=sh.reduce((s,h)=>s+h.pl,0);
+    const srcInt=getInterestEntries(src).reduce((s,e)=>s+e.interest,0);
+    const srcRate=(getRate(src)*100).toFixed(2);
+    return `<div class="row"><span class="row-l"><span class="pill ${SP[src]}">${SL[src]}</span> <span style="font-size:10.5px;color:var(--txt3)">${srcRate}% p.a.</span></span>
+      <span class="row-v">$${fmt(val)} <span style="color:${clr(pl)};font-size:11px">${fmtS(pl)}</span><br><span style="font-size:10.5px;color:var(--warn)">int A$${fmt(srcInt)}</span></span></div>`;
+  }).join('');
+  // Rates bar
+  if(DB.rates&&DB.rates.AUDUSD){
+    const rb=document.getElementById('rbar');rb.style.display='flex';
+    rb.innerHTML=[['AUD/USD',fmt(DB.settings.audUsd,4)],['EUR/USD',fmt(DB.settings.eurUsd,4)],['RBA',DB.settings.rbaRate+'%']].map(([p,v])=>`<div class="ritem"><div class="rpair">${p}</div><div class="rval">${v}</div></div>`).join('');
+  }
+  renderHList(document.getElementById('d-hold'),open,'all',5);
+}
+
+// ══════════════════════════════════════════════════
+// FUNDS PAGE
+// ══════════════════════════════════════════════════
+function renderFunds(){
+  updateRBAChips(DB.settings.rbaRate+'%');
+  const recs=fSrc==='all'?DB.funds:DB.funds.filter(f=>f.source===fSrc);
+  let totalIn=0,totalOut=0;
+  recs.forEach(f=>{
+    const a=toAUD(f.amount,f.currency||'AUD');
+    if(f.type==='in'||f.type==='loan-in'||f.type==='cny-convert') totalIn+=a;
+    else if(f.type==='out'||f.type==='repay-full'||f.type==='repay-partial') totalOut+=a;
+  });
+  const entries=getInterestEntries(fSrc);
+  const totalInt=entries.reduce((s,e)=>s+e.interest,0);
+  const {open}=calcHoldings();
+  let inv=0;
+  open.forEach(h=>{
+    if(fSrc==='all') inv+=toAUD(h.totalCost,'USD');
+    else if(h.srcs[fSrc]) inv+=toAUD(h.srcs[fSrc].cost,'USD');
+  });
+  const srcRate=fSrc==='all'?'—':(getRate(fSrc)*100).toFixed(2)+'%';
+  const netBalance=totalIn-totalOut;
+  // Gap = how much more invested than recorded capital
+  const gapAmt=Math.max(0, inv-netBalance);
+  const hasGap=gapAmt>0.01;
+  document.getElementById('f-stats').innerHTML=`
+    ${hasGap?`<div class="alert aw" style="grid-column:span 2;margin-bottom:0">⚠️ 資金缺口 A$${fmt(gapAmt)}（已投資比錄入資金多）— 正常（歷史數據），請補入資金</div>`:''}
+    <div class="sc"><div class="sl">Total Capital In (AUD)</div><div class="sv" style="color:var(--up)">A$${fmt(totalIn)}</div><div class="ss">所有入金累計</div></div>
+    <div class="sc"><div class="sl">Total Out / Repaid</div><div class="sv">A$${fmt(totalOut)}</div></div>
+    <div class="sc"><div class="sl">Net Capital</div><div class="sv">A$${fmt(netBalance)}</div></div>
+    <div class="sc"><div class="sl">Interest Accrued</div><div class="sv warn">A$${fmt(totalInt)}</div><div class="ss">${srcRate} · daily compound</div></div>`;
+  renderFundsView();
+}
+
+function renderFundsView(){
+  if(fView==='flows')    renderFlows();
+  if(fView==='cashflow') renderCashflow();
+  if(fView==='interest') { renderInterestDetail(); renderInterestPayList(); }
+  if(fView==='alloc')    renderAlloc();
+}
+
+// Trading cashflow: auto-derived from trades — all in AUD
+function renderCashflow(){
+  const el=document.getElementById('f-cashflow-list');
+  const src=fSrc;
+  const audUsd=DB.settings.audUsd||0.635;
+
+  const allTrades=(src==='all'?DB.trades:DB.trades.filter(t=>t.source===src))
+    .filter(t=>t.type==='buy'||t.type==='sell')
+    .sort((a,b)=>a.date<b.date?-1:1);
+
+  const recs=src==='all'?DB.funds:DB.funds.filter(f=>f.source===src);
+  let baseCapitalAUD=0;
+  recs.forEach(f=>{
+    const a=toAUD(f.amount,f.currency||'AUD');
+    if(f.type==='in'||f.type==='loan-in'||f.type==='cny-convert') baseCapitalAUD+=a;
+    else if(f.type==='out'||f.type==='repay-full'||f.type==='repay-partial') baseCapitalAUD-=a;
+  });
+
+  let totalBoughtAUD=0, totalSoldAUD=0;
+  allTrades.forEach(t=>{
+    const p=toUSD(t.price,t.currency||'USD');
+    const s=parseFloat(t.shares), f=parseFloat(t.fee)||0;
+    const v=(t.type==='buy'?s*p+f:s*p-f)/audUsd;
+    if(t.type==='buy') totalBoughtAUD+=v; else totalSoldAUD+=v;
+  });
+
+  const cashOnHand=baseCapitalAUD-totalBoughtAUD;
+  const availWithSell=cashOnHand+totalSoldAUD;
+
+  let runningAUD=baseCapitalAUD;
+  let rows='';
+  const byDate={};
+  allTrades.forEach(t=>{ if(!byDate[t.date])byDate[t.date]=[]; byDate[t.date].push(t); });
+  Object.entries(byDate).sort((a,b)=>a[0]<b[0]?-1:1).forEach(([date,dayTrades])=>{
+    dayTrades.forEach(t=>{
+      const priceUSD=toUSD(t.price,t.currency||'USD');
+      const shares=parseFloat(t.shares), feeUSD=parseFloat(t.fee)||0;
+      const valAUD=(t.type==='buy'?shares*priceUSD+feeUSD:shares*priceUSD-feeUSD)/audUsd;
+      if(t.type==='buy') runningAUD-=valAUD; else runningAUD+=valAUD;
+      const isBuy=t.type==='buy';
+      rows+=`<div style="display:flex;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--line);gap:10px">
+        <div style="width:7px;height:7px;border-radius:50%;background:${isBuy?'var(--dn)':'var(--up)'};flex-shrink:0;margin-top:5px"></div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:500">${isBuy?'Buy':'Sell'} ${t.ticker} <span class="pill ${SP[t.source]||SP.all}">${SL[t.source]||t.source}</span></div>
+          <div style="font-size:11px;color:var(--txt2)">${date} · ${fmt(shares,2)} sh @ $${fmt(priceUSD)} USD</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          <div style="font-size:13px;font-weight:600;color:${isBuy?'var(--dn)':'var(--up)'}">
+            ${isBuy?'-':'+'}A$${fmt(valAUD)}</div>
+          <div style="font-size:11px;color:${runningAUD<0?'var(--dn)':'var(--txt2)'}">餘 A$${fmt(runningAUD)}${runningAUD<0?' ⚠️':''}</div>
+        </div>
+      </div>`;
+    });
+  });
+
+  el.innerHTML=`
+    <div style="background:var(--bg3);border-radius:var(--rs);padding:12px;margin-bottom:12px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+        <div><div style="font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">資金入金</div>
+          <div style="font-size:15px;font-weight:700;font-family:var(--mono);color:var(--up)">A$${fmt(baseCapitalAUD)}</div></div>
+        <div><div style="font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">累計買入</div>
+          <div style="font-size:15px;font-weight:700;font-family:var(--mono);color:var(--dn)">-A$${fmt(totalBoughtAUD)}</div></div>
+        <div><div style="font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">賣出回流</div>
+          <div style="font-size:15px;font-weight:700;font-family:var(--mono);color:var(--up)">+A$${fmt(totalSoldAUD)}</div></div>
+        <div><div style="font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">未動用現金</div>
+          <div style="font-size:15px;font-weight:700;font-family:var(--mono);color:var(--me)">A$${fmt(cashOnHand)}</div>
+          <div style="font-size:10px;color:var(--txt3)">不含賣出回收</div></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;padding-top:10px;border-top:1px solid var(--line)">
+        <span style="font-size:12px;color:var(--txt2)">可用現金（含賣出回收）</span>
+        <span style="font-size:16px;font-weight:700;font-family:var(--mono);color:${availWithSell>=0?'var(--me)':'var(--dn)'}">A$${fmt(availWithSell)}${availWithSell<0?' ⚠️赤字':''}</span>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--txt3);margin-bottom:8px">匯率：1 USD = A$${fmt(1/audUsd,4)} · 共 ${allTrades.length} 筆交易</div>
+    ${rows||'<div class="empty">No trades yet</div>'}`;
+}
+
+function renderInterestPayList(){
+  const el=document.getElementById('f-int-pay-list');
+  if(!el) return;
+  const src=fSrc;
+  const pays=(DB.interestPayments||[])
+    .filter(p=>src==='all'||p.source===src)
+    .sort((a,b)=>b.date<a.date?-1:1);
+
+  // Summary
+  const accrued=getInterestEntries(src).reduce((s,e)=>s+e.interest,0);
+  const paid=pays.reduce((s,p)=>s+toAUD(p.amount,p.currency||'AUD'),0);
+  const remaining=accrued-paid;
+
+  const summary=`<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px">
+    <div style="text-align:center"><div style="font-size:10px;color:var(--txt3);margin-bottom:3px">應計利息</div><div style="font-family:var(--mono);font-weight:700;color:var(--warn)">A$${fmt(accrued)}</div></div>
+    <div style="text-align:center"><div style="font-size:10px;color:var(--txt3);margin-bottom:3px">已付</div><div style="font-family:var(--mono);font-weight:700;color:var(--up)">A$${fmt(paid)}</div></div>
+    <div style="text-align:center"><div style="font-size:10px;color:var(--txt3);margin-bottom:3px">未付餘額</div><div style="font-family:var(--mono);font-weight:700;color:${remaining>0?'var(--dn)':'var(--up)'}">A$${fmt(remaining)}</div></div>
+  </div>`;
+
+  if(!pays.length){
+    el.innerHTML=summary+'<div class="empty">暫無利息支付記錄</div>';
+    return;
+  }
+
+  el.innerHTML=summary+pays.map(p=>`
+    <div style="display:flex;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--line);gap:10px">
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:500">利息支付 <span class="pill ${SP[p.source]||SP.all}">${SL[p.source]||p.source}</span></div>
+        <div style="font-size:11px;color:var(--txt2);margin-top:2px">${p.date}${p.notes?' · '+p.notes:''}</div>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div style="font-size:13.5px;font-weight:600;color:var(--dn)">-A$${fmt(toAUD(p.amount,p.currency||'AUD'))}</div>
+        <div style="display:flex;gap:5px;margin-top:4px;justify-content:flex-end">
+          <button onclick="openInterestPayModal('${p.id}')" style="background:rgba(96,165,250,.1);border:1px solid rgba(96,165,250,.2);color:var(--me);cursor:pointer;font-size:10px;padding:2px 7px;border-radius:5px;font-family:var(--sans)">編輯</button>
+          <button onclick="deleteInterestPay('${p.id}')" style="background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.2);color:var(--dn);cursor:pointer;font-size:10px;padding:2px 7px;border-radius:5px;font-family:var(--sans)">刪除</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function renderFlows(){
+  const el=document.getElementById('f-flow-list');
+  const recs=(fSrc==='all'?DB.funds:DB.funds.filter(f=>f.source===fSrc)).sort((a,b)=>b.date<a.date?-1:1);
+  if(!recs.length){el.innerHTML='<div class="empty">No fund records. Add one below.</div>';return;}
+  const typeLabel={in:'入金 AUD',out:'出金','loan-in':'借入','repay-full':'全額還款','repay-partial':'部分還款','cny-pool':'CNY資金池','cny-convert':'CNY換匯 →AUD'};
+  el.innerHTML=recs.map(f=>{
+    const isIn=f.type==='in'||f.type==='loan-in'||f.type==='cny-convert';
+    const isCNYPool=f.type==='cny-pool';
+    const tl=typeLabel[f.type]||f.type;
+    const amt=toAUD(f.amount,f.currency||'AUD');
+    const int=calcFundInterest(f);
+
+    // For CNY pool: calculate how much already converted
+    let cnyExtra='';
+    if(isCNYPool){
+      const totalCNY=parseFloat(f.amount)||0;
+      // Find conversion records linked to this pool
+      const conversions=DB.funds.filter(x=>x.type==='cny-convert'&&x.cnyPoolId===f.id);
+      const convertedCNY=conversions.reduce((s,x)=>s+parseFloat(x.cnyAmount||0),0);
+      const remainingCNY=totalCNY-convertedCNY;
+      const convertedAUD=conversions.reduce((s,x)=>s+parseFloat(x.amount||0),0);
+      cnyExtra=`
+        <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--line);font-size:12px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+            <span style="color:var(--txt2)">總額</span><span style="font-family:var(--mono)">¥${fmt(totalCNY,0)}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+            <span style="color:var(--txt2)">已換</span><span style="font-family:var(--mono);color:var(--warn)">¥${fmt(convertedCNY,0)} → A$${fmt(convertedAUD)}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+            <span style="color:var(--txt2)">剩餘未換</span><span style="font-family:var(--mono);color:var(--up);font-weight:600">¥${fmt(remainingCNY,0)}</span>
+          </div>
+          ${remainingCNY>0.01?`<button class="btn btn-s" style="padding:6px 12px;font-size:12px" onclick="openCNYConvert('${f.id}','${f.source}',${totalCNY},${convertedCNY})">+ 換匯</button>`:'<span style="color:var(--up);font-size:11px">✓ 全部已換</span>'}
+        </div>`;
+    }
+
+    return `<div class="fcard">
+      <div class="fcard-top">
+        <div class="fcard-icon" style="background:${SC[f.source]}18">${SRC_EMOJI[f.source]||'💰'}</div>
+        <div class="fcard-info">
+          <div class="fcard-name">${tl} <span class="pill ${SP[f.source]}">${SL[f.source]}</span>${f.closed?'<span style="font-size:10px;color:var(--txt3);margin-left:4px">已還清</span>':''}</div>
+          <div class="fcard-sub">${f.date}${f.notes?' · '+f.notes:''}</div>
+        </div>
+        <div class="fcard-right">
+          <div class="fcard-amt" style="color:${isCNYPool?'var(--txt2)':isIn?'var(--up)':'var(--dn)'}">
+            ${isCNYPool?'¥'+fmt(parseFloat(f.amount),0):(isIn?'+':'-')+'A$'+fmt(amt)}
+          </div>
+          ${isIn&&!isCNYPool&&int>0?`<div class="fcard-int">+A$${fmt(int)} int.</div>`:''}
+        </div>
+      </div>
+      ${cnyExtra}
+      <div style="display:flex;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid var(--line)">
+        <button class="btn btn-s" style="padding:6px 12px;font-size:12px;flex:1" onclick="editFund('${f.id}')">✏️ 編輯</button>
+        <button class="btn btn-r" style="padding:6px 12px;font-size:12px;flex:1" onclick="deleteFund('${f.id}')">🗑 刪除</button>
+      </div>
+    </div>`;
   }).join('');
 }
-function wRand(pool){
-  const ws=pool.map(it=>S.weights[it]||1),tot=ws.reduce((a,b)=>a+b,0);
-  let r=Math.random()*tot;
-  for(let i=0;i<pool.length;i++){r-=ws[i];if(r<=0)return pool[i];}
-  return pool[pool.length-1];
+
+function deleteFund(id){
+  if(!confirm('確定刪除這條資金記錄？')) return;
+  DB.funds=DB.funds.filter(f=>f.id!==id); save();
+  queueSync('deleteFund',{id});
+  renderFunds(); toast('已刪除 ✓');
 }
 
-// ── PUNISH ──
-function toggleP(){
-  S.usePunish=!S.usePunish;
-  document.getElementById('pTog').className='tog'+(S.usePunish?' on':'');
-  document.getElementById('pSec').style.display=S.usePunish?'block':'none';
-  save();
+function editFund(id){
+  const f=DB.funds.find(x=>x.id===id);
+  if(!f) return;
+  const modal = document.getElementById('m-fund');
+  modal.dataset.editId = id;
+  document.querySelector('#m-fund .mt').textContent = '編輯資金記錄';
+  document.getElementById('fe-type').value=f.type||'in';
+  document.getElementById('fe-src').value=f.source||'me';
+  document.getElementById('fe-date').value=toInputDate(f.date);
+  document.getElementById('fe-amt').value=f.amount||'';
+  document.getElementById('fe-cur').value=f.currency||'AUD';
+  document.getElementById('fe-notes').value=f.notes||'';
+  toggleCNYFields();
+  openModal('m-fund');
 }
-function addPunish(){const v=document.getElementById('pInput').value.trim();if(!v)return;S.punishments.push(v);document.getElementById('pInput').value='';save();renderP();}
-function rmP(i){S.punishments.splice(i,1);save();renderP();}
-function renderP(){
-  document.getElementById('pTog').className='tog'+(S.usePunish?' on':'');
-  document.getElementById('pSec').style.display=S.usePunish?'block':'none';
-  document.getElementById('pTags').innerHTML=S.punishments.map((p,i)=>
-    `<span class="ptag">${p}<button class="tx" onclick="rmP(${i})">✕</button></span>`).join('');
-}
-document.getElementById('pInput').addEventListener('keydown',e=>{if(e.key==='Enter')addPunish();});
-function randP(){return S.usePunish&&S.punishments.length?S.punishments[Math.floor(Math.random()*S.punishments.length)]:null;}
 
-// ── MODE ──
-function setMode(m){S.mode=m;save();applyMode(m);}
-function applyMode(m){
-  // tabs
-  ['Chest','Elim','Dice','Finger'].forEach(x=>document.getElementById('tab'+x).classList.remove('on'));
-  const tmap={chest:'Chest',elim:'Elim',dice:'Dice',finger:'Finger'};
-  if(tmap[m])document.getElementById('tab'+tmap[m]).classList.add('on');
-  // cards
-  document.getElementById('cChest').style.display=m==='chest'?'block':'none';
-  document.getElementById('cElim').style.display=m==='elim'?'block':'none';
-  document.getElementById('cDice').style.display=m==='dice'?'block':'none';
-  // result + play btn visibility
-  document.getElementById('rArea').style.display=(m==='finger'||m==='dice')?'none':'flex';
-  document.getElementById('playBtn').style.display=m==='finger'?'none':'block';
-  document.querySelector('.brow').style.display=m==='finger'?'none':'flex';
-  // init content
-  if(m==='chest'){buildChests();resetRUI();}
-  if(m==='elim'){
-    eReset();
-    // Show items preview on wheel before game starts
-    ePool=[...S.items];
-    buildWheelCanvas();
-    ePool=[];
-    updEInfo();
-    resetRUI();
+// Convert any date format to YYYY-MM-DD for HTML date inputs
+function toInputDate(str){
+  if(!str) return today();
+  str = String(str).trim();
+  // Already YYYY-MM-DD
+  if(/^\d{4}-\d{2}-\d{2}$/.test(str)) return str;
+  // DD/MM/YYYY
+  if(/^\d{2}\/\d{2}\/\d{4}$/.test(str)){
+    const [d,m,y]=str.split('/');
+    return `${y}-${m}-${d}`;
   }
-  if(m==='dice'){initDiceFaces();document.getElementById('diceTotal').textContent='';resetRUI();}
-  if(m==='finger'){openFg();}
-  updBtn();
+  // Try native parse
+  const parsed = new Date(str);
+  if(!isNaN(parsed.getTime())) return parsed.toISOString().split('T')[0];
+  return today();
 }
 
-// ── BTN ──
-function updBtn(){
-  const btn=document.getElementById('playBtn');
-  const n=S.items.length;
-  btn.disabled=false;btn.className='bplay';
-  // Dice mode doesn't need items
-  if(S.mode==='dice'){btn.textContent='🎲 開始搖骰子';return;}
-  if(n<2){btn.disabled=true;btn.textContent='請先加入選項（最少2個）';return;}
-  if(S.mode==='chest'){btn.textContent='🔀 重新洗牌寶箱';}
-  else if(S.mode==='elim'){
-    if(eSpinning){btn.disabled=true;btn.textContent='轉緊...';btn.className='bplay red';}
-    else if(eDone){btn.textContent='🔄 重新開始';}
-    else if(ePool.length===0){btn.textContent='▶ 開始淘汰轉盤';btn.className='bplay red';}
-    else if(ePool.length===1){btn.textContent='🏆 已出勝利者';btn.disabled=true;}
-    else{btn.textContent=`🎡 轉！淘汰（剩 ${ePool.length} 個）`;btn.className='bplay red';}
-  }
-}
-function mainAct(){
-  if(S.items.length<2)return;
-  if(S.mode==='chest'){buildChests();resetRUI();}
-  else if(S.mode==='elim'){
-    if(eDone||ePool.length===0)startElim();
-    else eSpinWheel();
-  }
-  else if(S.mode==='dice')rollDice();
-}
-
-// ── RESULT ──
-function showR(winner,skipCeleb){
-  const pu=randP();
-  document.getElementById('rArea').innerHTML=
-    `<div class="rlbl">今晚就係</div><div class="rwin">${winner}</div>`+
-    (pu?`<div class="rpun">🎁 ${pu}</div>`:'');
-  if(!skipCeleb)setTimeout(()=>showCeleb(winner,pu),400);
-  return pu;
-}
-function resetRUI(){
-  const h={chest:'點選寶箱揭曉答案',elim:'開始淘汰轉盤',dice:'按下開始搖'};
-  const ic={chest:'🎁',elim:'🎡',dice:'🎲'};
-  document.getElementById('rArea').innerHTML=
-    `<div class="rempty"><div class="rei">${ic[S.mode]||'🎁'}</div><div class="reh">${h[S.mode]||''}</div></div>`;
-}
-function resetRound(){
-  eReset();
-  if(S.mode==='chest')buildChests();
-  if(S.mode==='elim'){ePool=[...S.items];buildWheelCanvas();ePool=[];updEInfo();}
-  if(S.mode==='dice'){initDiceFaces();document.getElementById('diceTotal').textContent='';}
-  resetRUI();updBtn();
+function renderInterestDetail(){
+  const el=document.getElementById('f-int-list');
+  const entries=getInterestEntries(fSrc);
+  if(!entries.length){el.innerHTML='<div class="empty">No interest-bearing entries</div>';return;}
+  el.innerHTML=entries.map(e=>`
+    <div class="fcard">
+      <div class="fcard-top">
+        <div class="fcard-icon" style="background:${SC[e.source]}18">${SRC_EMOJI[e.source]||'💰'}</div>
+        <div class="fcard-info">
+          <div class="fcard-name"><span class="pill ${SP[e.source]}">${SL[e.source]}</span> A$${fmt(e.principal)}
+            ${e.pendingCNY?'<span style="font-size:10px;color:var(--warn);margin-left:4px">⏳ CNY待換匯</span>':''}
+            ${e.closed?'<span style="font-size:10px;color:var(--txt3);margin-left:4px">已還清</span>':''}
+          </div>
+          <div class="fcard-sub">
+            ${e.pendingCNY?'CNY入金，換匯後才計息':'From '+e.date+(e.convertedDate?' (AUD from '+e.convertedDate+')':'→ today · '+e.days+' days')}
+          </div>
+        </div>
+        <div class="fcard-right">
+          <div class="fcard-amt" style="color:${e.pendingCNY?'var(--txt3)':'var(--warn)'}">${e.pendingCNY?'待換匯':'+A$'+fmt(e.interest)}</div>
+          <div class="fcard-int">${e.rate}% p.a.</div>
+        </div>
+      </div>
+      ${!e.pendingCNY?`<div class="int-bar">
+        <div class="int-row"><span class="il">Principal</span><span class="iv">A$${fmt(e.principal)}</span></div>
+        <div class="int-row"><span class="il">Interest (${e.days}d @ ${e.rate}%)</span><span class="iv">+A$${fmt(e.interest)}</span></div>
+        <div class="int-row"><span class="il">Total value</span><span class="iv">A$${fmt(e.principal+e.interest)}</span></div>
+        <div class="int-row"><span class="il">Effective yield</span><span class="iv">${e.principal>0?(e.interest/e.principal*100).toFixed(3):'0.000'}%</span></div>
+      </div>`:''}
+    </div>`).join('');
 }
 
-// ── CHEST ──
-function buildChests(){
-  chestItems=[...S.items].sort(()=>Math.random()-.5);
-  document.getElementById('chestHint').textContent='👆 點一個寶箱開啟';
-  document.getElementById('chestGrid').innerHTML=chestItems.map((item,i)=>
-    `<div class="chest-item" id="ci${i}" onclick="pickChest(${i})">
-      <div class="chest-box" id="cb${i}">${CHEST_EM[i%CHEST_EM.length]}</div>
-      <div class="chest-num">寶箱${i+1}</div>
-    </div>`
-  ).join('');
-}
-function pickChest(idx){
-  const item=document.getElementById('ci'+idx);
-  if(!item||item.classList.contains('picked')||item.classList.contains('faded'))return;
-  // Fade others
-  chestItems.forEach((_,i)=>{
-    if(i!==idx)document.getElementById('ci'+i)?.classList.add('faded');
+// Shared function: available cash in AUD — used by both cashflow and alloc views
+// Logic: capital in (AUD) - buy costs (AUD equiv) + sell proceeds (AUD equiv)
+function calcAvailCashAUD(src){
+  const audUsd=DB.settings.audUsd||0.635;
+  const recs=src==='all'?DB.funds:DB.funds.filter(f=>f.source===src);
+  let capitalAUD=0;
+  recs.forEach(f=>{
+    const a=toAUD(f.amount,f.currency||'AUD');
+    if(f.type==='in'||f.type==='loan-in'||f.type==='cny-convert') capitalAUD+=a;
+    else if(f.type==='out'||f.type==='repay-full'||f.type==='repay-partial') capitalAUD-=a;
   });
-  // Animate open
-  const box=document.getElementById('cb'+idx);
-  box.style.transition='all .3s';
-  box.style.transform='scale(1.15)';
-  setTimeout(()=>{
-    box.style.transform='scale(1)';
-    box.textContent=chestItems[idx];
-    box.style.fontSize='13px';
-    box.style.fontWeight='700';
-    box.style.color='#92400E';
-    box.style.background='#FEF3C7';
-    box.style.borderColor='#F59E0B';
-    item.classList.add('picked');
-    setTimeout(()=>showR(chestItems[idx]),300);
-  },200);
-  document.getElementById('chestHint').textContent='🎉 開咗啦！按「重新洗牌」再玩';
+  // Add/subtract trades in AUD
+  const trades=(src==='all'?DB.trades:DB.trades.filter(t=>t.source===src))
+    .filter(t=>t.type==='buy'||t.type==='sell');
+  trades.forEach(t=>{
+    const priceUSD=toUSD(t.price,t.currency||'USD');
+    const shares=parseFloat(t.shares);
+    const feeUSD=parseFloat(t.fee)||0;
+    const valUSD=t.type==='buy'?shares*priceUSD+feeUSD:shares*priceUSD-feeUSD;
+    const valAUD=valUSD/audUsd;
+    if(t.type==='buy') capitalAUD-=valAUD;
+    else capitalAUD+=valAUD;
+  });
+  return capitalAUD; // can be negative (gap)
 }
 
-// ── ELIM WHEEL ──
-function eReset(){ePool=[];eElim=[];eAngle=0;eSpinning=false;eDone=false;document.getElementById('eLog').innerHTML='';}
-function startElim(){eReset();ePool=[...S.items];buildWheelCanvas();updEInfo();resetRUI();updBtn();}
+function renderAlloc(){
+  const entries=getInterestEntries(fSrc);
+  const totalInt=entries.reduce((s,e)=>s+e.interest,0);
+  const {open,closed}=calcHoldings();
 
-function buildWheelCanvas(hl){
-  const cv=document.getElementById('wCanvas'),ctx=cv.getContext('2d');
-  const cx=130,cy=130,r=124;
-  ctx.clearRect(0,0,260,260);
-  const n=ePool.length;
-  if(!n){ctx.fillStyle='#E2E8F0';ctx.beginPath();ctx.arc(cx,cy,r,0,2*Math.PI);ctx.fill();return;}
-  const arc=2*Math.PI/n;
-  for(let i=0;i<n;i++){
-    const s=eAngle+i*arc-Math.PI/2,e2=s+arc;
-    ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,s,e2);ctx.closePath();
-    ctx.fillStyle=hl===i?'#FCD34D':C[S.items.indexOf(ePool[i])%C.length];
-    ctx.fill();ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.stroke();
-    ctx.save();ctx.translate(cx,cy);ctx.rotate(s+arc/2);
-    ctx.textAlign='right';ctx.fillStyle='#fff';
-    ctx.font=`bold ${n>6?11:14}px -apple-system,sans-serif`;
-    ctx.shadowColor='rgba(0,0,0,.3)';ctx.shadowBlur=3;
-    ctx.fillText(ePool[i].length>5?ePool[i].slice(0,5)+'…':ePool[i],r-10,5);
-    ctx.restore();
-  }
-  ctx.beginPath();ctx.arc(cx,cy,16,0,2*Math.PI);
-  ctx.fillStyle='#fff';ctx.fill();ctx.strokeStyle='#E2E8F0';ctx.lineWidth=3;ctx.stroke();
-}
-
-function updEInfo(){
-  const n=ePool.length;
-  document.getElementById('eInfo').innerHTML=
-    n>1?`剩低 <b>${n}</b> 個，按轉盤淘汰`:
-    n===1?`🏆 <b style="color:var(--go)">${ePool[0]}</b> 勝利！`:
-    '按下開始淘汰轉盤';
-}
-
-function eSpinWheel(){
-  if(eSpinning||ePool.length<=1)return;
-  eSpinning=true;updBtn();
-  const tot=(Math.random()*3+5)*2*Math.PI,dur=2800,t0=performance.now(),a0=eAngle;
-  function ease(t){return 1-Math.pow(1-t,4);}
-  // Phase 1: animate spin
-  function spin(now){
-    const p=Math.min((now-t0)/dur,1);
-    eAngle=a0+tot*ease(p);
-    buildWheelCanvas();
-    if(p<1)requestAnimationFrame(spin);
-    else afterSpin();
-  }
-  requestAnimationFrame(spin);
-  // Phase 2: find hit + flash
-  function afterSpin(){
-    const n=ePool.length,arc=2*Math.PI/n;
-    const norm=(((-eAngle%(2*Math.PI))+(2*Math.PI))%(2*Math.PI));
-    const hi=Math.floor(norm/arc)%n;
-    const hitItem=ePool[hi];
-    let fc=0;
-    function flash(){
-      buildWheelCanvas(fc%2===0?hi:-1);fc++;
-      if(fc<8)setTimeout(flash,fc%2===0?120:100);
-      else setTimeout(()=>doElim(hi,hitItem),350);
+  let inv=0;
+  open.forEach(h=>{
+    const val=h.currentValue||h.totalCost;
+    if(fSrc==='all') inv+=toAUD(val,'USD');
+    else if(h.srcs[fSrc]){
+      const sh=h.srcs[fSrc];
+      inv+=toAUD(h.currentPrice?h.currentPrice*sh.shares:sh.cost,'USD');
     }
-    flash();
+  });
+
+  const recs=fSrc==='all'?DB.funds:DB.funds.filter(f=>f.source===fSrc);
+  let totalIn=0;
+  recs.forEach(f=>{
+    if(f.type==='in'||f.type==='loan-in'||f.type==='cny-convert')
+      totalIn+=toAUD(f.amount,f.currency||'AUD');
+  });
+
+  // Use shared function — same number as cashflow tab
+  const availCash=calcAvailCashAUD(fSrc);
+  const sellProceeds=toAUD(calcSellProceeds(fSrc),'USD');
+
+  drawDonut('f-donut','f-leg',[
+    {label:'已投資 (現值)',val:inv,color:'#34d399'},
+    {label:'可用現金（含賣出回收）',val:availCash,color:'#60a5fa'},
+    {label:'理論利息',val:totalInt,color:'#fbbf24'},
+  ],inv+availCash+totalInt,'A$');
+
+  let unrealizedPL=0;
+  open.forEach(h=>{
+    if(fSrc==='all') unrealizedPL+=(h.unrealizedPL||0);
+    else if(h.srcs[fSrc]){const px=h.currentPrice;const sh=h.srcs[fSrc];unrealizedPL+=px?px*sh.shares-sh.cost:0;}
+  });
+  const realPL=closed.filter(c=>fSrc==='all'||c.source===fSrc).reduce((s,c)=>s+c.realPL,0);
+  const intUSD=totalInt*(DB.settings.audUsd||0.635);
+  document.getElementById('f-compare').innerHTML=`
+    <div class="row"><span class="row-l">資金入金 (AUD)</span><span class="row-v">A$${fmt(totalIn)}</span></div>
+    <div class="row"><span class="row-l">賣出回收 (≈AUD)</span><span class="row-v" style="color:var(--up)">+A$${fmt(sellProceeds)}</span></div>
+    <div class="row"><span class="row-l">可用現金</span><span class="row-v" style="color:var(--me)">A$${fmt(availCash)}</span></div>
+    <div class="row"><span class="row-l">已實現 P&L</span><span class="row-v" style="color:${clr(realPL)}">${fmtS(realPL)}</span></div>
+    <div class="row"><span class="row-l">未實現 P&L</span><span class="row-v" style="color:${clr(unrealizedPL)}">${fmtS(unrealizedPL)}</span></div>
+    <div class="row"><span class="row-l">理論銀行利息 (AUD)</span><span class="row-v" style="color:var(--warn)">A$${fmt(totalInt)}</span></div>
+    <div class="row" style="font-weight:600"><span class="row-l">投資 vs 銀行 Delta</span><span class="row-v" style="color:${clr(unrealizedPL+realPL-intUSD)}">${fmtS(unrealizedPL+realPL-intUSD)}</span></div>`;
+}
+
+// ══════════════════════════════════════════════════
+// INVEST PAGE
+// ══════════════════════════════════════════════════
+function renderInvest(){
+  const {open,closed}=calcHoldings();
+  const filtOpen=open.map(h=>{
+    if(iSrc==='all') return h;
+    const sh=h.srcs[iSrc]; if(!sh||sh.shares<0.0001) return null;
+    const px=h.currentPrice;
+    return {...h,totalShares:sh.shares,totalCost:sh.cost,avgCost:sh.cost/sh.shares,
+      currentValue:px?px*sh.shares:null,unrealizedPL:px?px*sh.shares-sh.cost:null,
+      unrealizedPct:px&&sh.cost>0?(px*sh.shares-sh.cost)/sh.cost*100:null};
+  }).filter(Boolean);
+  const filtClosed=iSrc==='all'?closed:closed.filter(c=>c.source===iSrc);
+  let tv=0,tc=0,upl=0;
+  filtOpen.forEach(h=>{tc+=h.totalCost;if(h.currentValue!==null){tv+=h.currentValue;upl+=h.unrealizedPL;}else tv+=h.totalCost;});
+  const rl=filtClosed.reduce((s,c)=>s+c.realPL,0);
+  const pct=tc>0?upl/tc*100:0;
+  document.getElementById('inv-stats').innerHTML=`
+    <div class="sc full"><div class="sl">Current Value (USD)</div><div class="sv">$${fmt(tv)}</div><div class="ss">Cost $${fmt(tc)}</div></div>
+    <div class="sc"><div class="sl">Unrealised P&L</div><div class="sv" style="color:${clr(upl)}">${fmtS(upl)}</div><div class="ss">${(pct>=0?'+':'')+pct.toFixed(2)}%</div></div>
+    <div class="sc"><div class="sl">Realised P&L</div><div class="sv" style="color:${clr(rl)}">${fmtS(rl)}</div></div>`;
+  renderHList(document.getElementById('inv-hold'),filtOpen,iSrc);
+  const soldEl=document.getElementById('inv-sold');
+  if(!filtClosed.length){soldEl.innerHTML='<div class="empty">No closed trades</div>';return;}
+  // Group by ticker for summary, but show individual trades
+  const bt={};
+  filtClosed.forEach(c=>{
+    if(!bt[c.ticker])bt[c.ticker]={pl:0,proceeds:0,n:0,trades:[]};
+    bt[c.ticker].pl+=c.realPL;
+    bt[c.ticker].proceeds+=c.sellVal;
+    bt[c.ticker].n++;
+    bt[c.ticker].trades.push(c);
+  });
+  soldEl.innerHTML=Object.entries(bt).map(([ticker,v])=>`
+    <div style="margin-bottom:12px">
+      <div class="row" style="font-weight:600;cursor:pointer" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'':'none'">
+        <span class="row-l">${ticker} · ${v.n} sell${v.n>1?'s':''} <span style="font-size:10px;color:var(--txt3)">▼ detail</span></span>
+        <span>
+          <span class="row-v" style="color:${clr(v.pl)}">${fmtS(v.pl)} P&L</span>
+          <span class="row-v" style="color:var(--up);margin-left:10px">+$${fmt(v.proceeds)} proceeds</span>
+        </span>
+      </div>
+      <div style="display:none;padding-left:12px;border-left:2px solid var(--line2)">
+        ${v.trades.map(c=>`
+          <div class="row" style="font-size:12px">
+            <span class="row-l">${c.date} · ${fmt(c.shares,2)} sh @ $${fmt(c.price)}<br>
+              <span style="color:var(--txt3)">Cost basis $${fmt(c.costBasis)} · fee $${fmt(c.fee)}</span>
+            </span>
+            <span style="text-align:right">
+              <div style="color:var(--up)">+$${fmt(c.sellVal)}</div>
+              <div style="color:${clr(c.realPL)};font-size:11px">${fmtS(c.realPL)} P&L</div>
+            </span>
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
+// ══════════════════════════════════════════════════
+// HOLDINGS LIST RENDERER
+// ══════════════════════════════════════════════════
+const TC=['#60a5fa','#34d399','#fbbf24','#c084fc','#f87171','#22d3ee','#f472b6','#fb923c'];
+function tcolor(t){return TC[t.charCodeAt(0)%TC.length];}
+
+function renderHList(el,list,viewSrc,limit=999){
+  if(!list.length){el.innerHTML='<div class="empty">No positions</div>';return;}
+  el.innerHTML=list.slice(0,limit).map(h=>{
+    const c=tcolor(h.ticker);
+    const hasPx=h.currentValue!==null;
+    const pl=h.unrealizedPL||0,pct=h.unrealizedPct||0;
+    const stripe=viewSrc==='all'
+      ? Object.entries(h.srcs||{}).filter(([,v])=>v.shares>0.0001).map(([s,v])=>`<div class="stripe-seg" style="flex:${v.shares/(h.totalShares||1)};background:${SC[s]}"></div>`).join('')
+      : `<div class="stripe-seg" style="flex:1;background:${SC[viewSrc]||SC.all}"></div>`;
+    return `<div class="hrow" onclick="openStockDetail('${h.ticker}')">
+      <div class="hrow-top">
+        <div class="tic" style="background:${c}18;color:${c}">${h.ticker.slice(0,5)}</div>
+        <div class="hi">
+          <div class="ht">${h.ticker}${hasPx?` <span class="live"><span class="ldot"></span></span>`:''}</div>
+          <div class="hs">${fmt(h.totalShares,2)} sh · avg $${fmt(h.avgCost)}${hasPx?' · now $'+fmt(h.currentPrice):''}</div>
+        </div>
+        <div class="hr">
+          <div class="hv">$${fmt(hasPx?h.currentValue:h.totalCost)}</div>
+          <div class="hp" style="color:${clr(pl)}">${hasPx?(pl>=0?'+':'')+fmt(pl)+' ('+pct.toFixed(1)+'%)':'—'}</div>
+        </div>
+      </div>
+      <div class="stripe">${stripe}</div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════
+// STOCK DETAIL MODAL
+// ══════════════════════════════════════════════════
+function openStockDetail(ticker){
+  const {open,closed}=calcHoldings();
+  const h=open.find(x=>x.ticker===ticker);
+  if(!h)return;
+  document.getElementById('m-stock-title').textContent=ticker;
+  const trades=DB.trades.filter(t=>t.ticker===ticker);
+  const realPL=closed.filter(c=>c.ticker===ticker).reduce((s,c)=>s+c.realPL,0);
+  const divs=trades.filter(t=>t.type==='dividend').reduce((s,t)=>s+parseFloat(t.dividend||0),0);
+  const srcRows=Object.entries(h.srcs).filter(([,v])=>v.shares>0.0001).map(([src,v])=>{
+    const cv=h.currentPrice?h.currentPrice*v.shares:null;
+    const pl=cv?cv-v.cost:null;
+    return `<div class="row"><span class="row-l"><span class="pill ${SP[src]}">${SL[src]}</span></span>
+      <span class="row-v" style="font-size:12px">${fmt(v.shares,4)} sh · avg $${fmt(v.cost/v.shares)}<br>
+      <span style="color:var(--txt2)">cost $${fmt(v.cost)}</span>${pl!==null?` <span style="color:${clr(pl)}">${fmtS(pl)}</span>`:''}</span></div>`;
+  }).join('');
+  const tradeRows=[...trades].sort((a,b)=>b.date<a.date?-1:1).slice(0,20).map(t=>`
+    <div class="row" style="align-items:flex-start">
+      <span class="row-l">
+        <div>${t.type==='buy'?'Buy':t.type==='sell'?'Sell':'Div'} <span class="pill ${SP[t.source]}">${SL[t.source]}</span></div>
+        <div style="font-size:11px">${t.date}${t.type!=='dividend'?' · '+fmt(t.shares,2)+' sh @ $'+fmt(t.price):''}</div>
+      </span>
+      <span style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+        <span class="row-v" style="color:${t.type==='buy'?'var(--dn)':t.type==='dividend'?'var(--warn)':'var(--up)'}">
+          ${t.type==='buy'?'-':'+'} $${t.type==='dividend'?fmt(t.dividend||0):fmt(parseFloat(t.shares)*toUSD(t.price,t.currency||'USD'))}
+        </span>
+        <button onclick="editTrade('${t.id}')" style="background:rgba(96,165,250,.1);border:1px solid rgba(96,165,250,.2);color:var(--me);cursor:pointer;font-size:11px;padding:2px 8px;border-radius:6px;font-family:var(--sans)">編輯</button>
+        <button onclick="deleteTrade('${t.id}')" style="background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.2);color:var(--dn);cursor:pointer;font-size:11px;padding:2px 8px;border-radius:6px;font-family:var(--sans)">刪除</button>
+      </span>
+    </div>`).join('');
+  document.getElementById('m-stock-body').innerHTML=`
+    ${srcRows}<div class="div"></div>
+    <div class="row"><span class="row-l">Total shares</span><span class="row-v">${fmt(h.totalShares,4)}</span></div>
+    <div class="row"><span class="row-l">Avg cost (blended)</span><span class="row-v">$${fmt(h.avgCost)}</span></div>
+    ${h.currentPrice?`<div class="row"><span class="row-l">Current price <span class="live"><span class="ldot"></span></span></span><span class="row-v">$${fmt(h.currentPrice)}</span></div>
+    <div class="row"><span class="row-l">Current value</span><span class="row-v">$${fmt(h.currentValue)}</span></div>
+    <div class="row"><span class="row-l">Unrealised P&L</span><span class="row-v" style="color:${clr(h.unrealizedPL)}">${fmtS(h.unrealizedPL)} (${h.unrealizedPct.toFixed(2)}%)</span></div>`
+    :'<div class="alert ai" style="margin:8px 0">Refresh prices for live P&L</div>'}
+    ${realPL!==0?`<div class="row"><span class="row-l">Realised P&L</span><span class="row-v" style="color:${clr(realPL)}">${fmtS(realPL)}</span></div>`:''}
+    ${divs>0?`<div class="row"><span class="row-l">Dividends</span><span class="row-v" style="color:var(--warn)">+$${fmt(divs)}</span></div>`:''}
+    <div class="div"></div>
+    <div style="font-size:10px;color:var(--txt3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">Trade History</div>
+    ${tradeRows}`;
+  openModal('m-stock');
+}
+
+// ══════════════════════════════════════════════════
+// DONUT
+// ══════════════════════════════════════════════════
+function drawDonut(cId,lId,segs,total,sign='$'){
+  const canvas=document.getElementById(cId),leg=document.getElementById(lId);
+  const ctx=canvas.getContext('2d');ctx.clearRect(0,0,110,110);
+  if(total<=0){leg.innerHTML='<div class="empty" style="padding:4px">No data</div>';return;}
+  let a=-Math.PI/2;
+  segs.forEach(s=>{if(s.val<=0)return;const sl=s.val/total*Math.PI*2;ctx.beginPath();ctx.moveTo(55,55);ctx.arc(55,55,50,a,a+sl);ctx.closePath();ctx.fillStyle=s.color;ctx.fill();a+=sl;});
+  ctx.beginPath();ctx.arc(55,55,30,0,Math.PI*2);ctx.fillStyle='var(--bg2)';ctx.fill();
+  leg.innerHTML=segs.map(s=>`<div class="dleg-row"><div class="dleg-dot" style="background:${s.color}"></div><span>${s.label}</span><span style="color:var(--txt2);font-size:11px;margin-left:auto;margin-right:6px">${sign}${fmt(s.val)}</span><span class="dleg-pct">${total>0?(s.val/total*100).toFixed(0):0}%</span></div>`).join('');
+}
+
+// ══════════════════════════════════════════════════
+// ADD TRADE
+// ══════════════════════════════════════════════════
+let ttype='buy';
+let editTradeId=''; // track if editing existing trade
+
+function initAdd(prefill){
+  // Only reset editTradeId if this is a fresh new trade (no prefill)
+  if(!prefill) {
+    editTradeId='';
+    document.querySelector('#pg-add h1').textContent='Add Trade';
+    document.getElementById('t-date').value=today();
+    document.getElementById('t-ticker').value='';
+    document.getElementById('t-shares').value='';
+    document.getElementById('t-price').value='';
+    document.getElementById('t-fee').value='1.68';
+    document.getElementById('t-notes').value='';
+    document.getElementById('t-div').value='';
+    // Reset type to buy
+    ttype='buy';
+    document.querySelectorAll('#pg-add .seg-btn').forEach((b,i)=>b.classList.toggle('active',i===0));
+    document.getElementById('t-div-f').style.display='none';
+    document.getElementById('t-bs').style.display='';
   }
-  // Phase 3: eliminate
-  function doElim(hi,hitItem){
-    ePool.splice(hi,1);eElim.push(hitItem);
-    document.getElementById('eLog').innerHTML=
-      eElim.map(e=>`<span class="etag">❌ ${e}</span>`).join('')+
-      (ePool.length===1?`<span class="ewtag">🏆 ${ePool[0]}</span>`:'');
-    buildWheelCanvas();updEInfo();
-    eSpinning=false;
-    if(ePool.length===1){
-      eDone=true;
-      const pu=randP();
-      showR(ePool[0],true);
-      setTimeout(()=>showCeleb(ePool[0],pu),600);
+  document.getElementById('t-preview').style.display='none';
+  document.getElementById('t-warn').style.display='none';
+  // Repopulate ticker dropdown
+  const sel=document.getElementById('t-ticker');
+  const prev=sel.value;
+  sel.innerHTML='<option value="">Select ticker…</option>'+(DB.settings.tickers||[]).map(t=>`<option value="${t}">${t}</option>`).join('');
+  if(prefill){
+    if(prefill.ticker) sel.value=prefill.ticker;
+    if(prefill.date) document.getElementById('t-date').value=toInputDate(prefill.date);
+    if(prefill.source) document.getElementById('t-src').value=prefill.source;
+    if(prefill.shares) document.getElementById('t-shares').value=prefill.shares;
+    if(prefill.price) document.getElementById('t-price').value=prefill.price;
+    if(prefill.fee) document.getElementById('t-fee').value=prefill.fee;
+    if(prefill.currency) document.getElementById('t-cur').value=prefill.currency||'USD';
+    if(prefill.notes) document.getElementById('t-notes').value=prefill.notes||'';
+    if(prefill.dividend) document.getElementById('t-div').value=prefill.dividend||'';
+  } else if(prev) {
+    sel.value=prev;
+  }
+}
+
+function editTrade(id){
+  const t=DB.trades.find(x=>x.id===id);
+  if(!t) return;
+  editTradeId=id; // set BEFORE showPage so initAdd won't reset it
+  closeModal('m-stock');
+  showPage('add', document.querySelectorAll('.nb')[2]);
+  document.querySelector('#pg-add h1').textContent='Edit Trade';
+  // Set trade type
+  ttype=t.type||'buy';
+  document.querySelectorAll('#pg-add .seg-btn').forEach(b=>{
+    b.classList.toggle('active', b.textContent.toLowerCase().trim()===ttype);
+  });
+  document.getElementById('t-div-f').style.display=ttype==='dividend'?'':'none';
+  document.getElementById('t-bs').style.display=ttype==='dividend'?'none':'';
+  initAdd(t); // pass trade data as prefill
+  updatePreview();
+}
+function setTT(t,btn){
+  ttype=t;
+  document.querySelectorAll('#pg-add .seg-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+  document.getElementById('t-div-f').style.display=t==='dividend'?'':'none';
+  document.getElementById('t-bs').style.display=t==='dividend'?'none':'';
+  updatePreview();
+}
+function updatePreview(){
+  const ticker=document.getElementById('t-ticker').value;
+  const shares=parseFloat(document.getElementById('t-shares').value)||0;
+  const price=parseFloat(document.getElementById('t-price').value)||0;
+  const fee=parseFloat(document.getElementById('t-fee').value)||0;
+  const src=document.getElementById('t-src').value;
+  const cur=document.getElementById('t-cur').value;
+  document.getElementById('t-warn').style.display='none';
+  if(!ticker||!shares||!price){document.getElementById('t-preview').style.display='none';return;}
+  document.getElementById('t-preview').style.display='';
+  const pu=toUSD(price,cur);
+  const total=ttype==='buy'?shares*pu+fee:shares*pu-fee;
+  document.getElementById('pv-total').textContent='$'+fmt(total);
+  document.getElementById('pv-per').textContent='$'+fmt(pu)+'/share';
+  const {open}=calcHoldings();
+  const h=open.find(x=>x.ticker===ticker);
+  if(ttype==='buy'){
+    // Fund check: available = totalIn - totalOut - already invested
+    const recs=DB.funds.filter(f=>f.source===src);
+    let avail=0;
+    recs.forEach(f=>{const a=toUSD(f.amount,f.currency||'AUD');if(f.type==='in'||f.type==='loan-in')avail+=a;else avail-=a;});
+    let invested=0;
+    open.forEach(hh=>{if(hh.srcs[src])invested+=hh.srcs[src].cost;});
+    avail-=invested;
+    if(total>avail+0.01){
+      document.getElementById('t-warn').style.display='';
+      document.getElementById('t-warn').textContent=`⚠️ ${SL[src]} 可用資金 $${fmt(avail)}，需要 $${fmt(total)}`;
     }
-    updBtn();
+    if(h&&h.srcs[src]&&h.srcs[src].shares>0.0001){
+      const s=h.srcs[src];
+      document.getElementById('pv-avg-r').style.display='';
+      document.getElementById('pv-avg').textContent='$'+fmt((s.cost+total)/(s.shares+shares))+'/share';
+    } else { document.getElementById('pv-avg-r').style.display='none'; }
+    document.getElementById('pv-pl-r').style.display='none';
+  } else if(ttype==='sell'){
+    if(h&&h.srcs[src]&&h.srcs[src].shares>0.0001){
+      const s=h.srcs[src];
+      const pl=(pu-s.cost/s.shares)*shares-fee;
+      document.getElementById('pv-pl-r').style.display='';
+      const el=document.getElementById('pv-pl');el.textContent=fmtS(pl);el.style.color=clr(pl);
+    } else { document.getElementById('pv-pl-r').style.display='none'; }
+    document.getElementById('pv-avg-r').style.display='none';
   }
 }
-
-// ── DICE ──
-// ── DICE ──
-const DICE_FACES=['⚀','⚁','⚂','⚃','⚄','⚅'];
-let dCount=3;
-
-function setDiceCount(n){
-  dCount=n;
-  [1,2,3].forEach(x=>document.getElementById('dc'+x).className='dcb'+(x===n?' on':''));
-  initDiceFaces();
-  document.getElementById('diceTotal').textContent='';
-}
-function initDiceFaces(){
-  document.getElementById('diceFaces').innerHTML=
-    Array.from({length:dCount},(_,i)=>`<span class="d-face" id="df${i}">🎲</span>`).join('');
-}
-function rollDice(){
-  if(dRunning)return;
-  dRunning=true;
-  document.getElementById('diceTotal').textContent='搖緊...';
-  document.getElementById('playBtn').disabled=true;
-  let step=0;
-  const total=20;
-  function tick(){
-    for(let i=0;i<dCount;i++){
-      const el=document.getElementById('df'+i);
-      if(!el)continue;
-      el.textContent=DICE_FACES[Math.floor(Math.random()*6)];
-      if(step%2===0)el.classList.add('shake');
-      else el.classList.remove('shake');
-    }
-    step++;
-    if(step<total){
-      setTimeout(tick, step<8?60:step<15?110:170);
-    } else {
-      const final=Array.from({length:dCount},()=>Math.floor(Math.random()*6));
-      let sum=0;
-      final.forEach((v,i)=>{
-        const el=document.getElementById('df'+i);
-        if(el){el.textContent=DICE_FACES[v];el.classList.remove('shake');}
-        sum+=v+1;
-      });
-      document.getElementById('diceTotal').textContent=dCount>1?`總點數：${sum}`:`點數：${sum}`;
-      dRunning=false;
-      document.getElementById('playBtn').disabled=false;
-      document.getElementById('playBtn').textContent='🎲 再搖一次';
+async function saveTrade(){
+  if(!requireReady()) return;
+  const ticker=document.getElementById('t-ticker').value;
+  const date=document.getElementById('t-date').value;
+  const src=document.getElementById('t-src').value;
+  const shares=document.getElementById('t-shares').value;
+  const price=document.getElementById('t-price').value;
+  const fee=document.getElementById('t-fee').value||'0';
+  const cur=document.getElementById('t-cur').value;
+  const notes=document.getElementById('t-notes').value;
+  const dividend=document.getElementById('t-div').value;
+  if(!ticker||!date){toast('Select ticker and date');return;}
+  if(ttype!=='dividend'&&(!shares||!price)){toast('Enter shares and price');return;}
+  if(ttype==='sell'){
+    const {open}=calcHoldings();
+    const h=open.find(x=>x.ticker===ticker);
+    const sh=h&&h.srcs[src];
+    if(!sh||sh.shares<parseFloat(shares)){toast(`❌ ${ticker} in ${SL[src]}: not enough shares`);return;}
+  }
+  if(ttype==='buy'){
+    const pu=toUSD(price,cur);
+    const total=parseFloat(shares)*pu+(parseFloat(fee)||0);
+    const {open}=calcHoldings();
+    const recs=DB.funds.filter(f=>f.source===src);
+    let avail=0;
+    recs.forEach(f=>{const a=toUSD(f.amount,f.currency||'AUD');if(f.type==='in'||f.type==='loan-in')avail+=a;else avail-=a;});
+    let invested=0; open.forEach(h=>{if(h.srcs[src])invested+=h.srcs[src].cost;}); avail-=invested;
+    if(total>avail+0.01){
+      if(!confirm(`⚠️ 資金不足！\n${SL[src]} 可用 $${fmt(avail)}\n需要 $${fmt(total)}\n\n繼續嗎？`))return;
     }
   }
-  tick();
-}
-
-// ── FINGER ──
-function openFg(){
-  fgT={};fgDone=false;
-  document.getElementById('fgRes').classList.remove('show');
-  document.getElementById('fgBtn').classList.remove('show');
-  document.getElementById('fgBtn').textContent='🎲 開始抽籤';
-  document.getElementById('fgCnt').textContent='等緊大家放手指...';
-
-  // Bind start button - both click and touchend for Safari reliability
-  const btn=document.getElementById('fgBtn');
-  const newBtn=btn.cloneNode(true); // clone removes old listeners
-  btn.parentNode.replaceChild(newBtn,btn);
-  newBtn.addEventListener('click',fgPick);
-  newBtn.addEventListener('touchend',function(e){e.preventDefault();fgPick();},{passive:false});
-
-  // Bind back button
-  const back=document.getElementById('fgBack');
-  const newBack=back.cloneNode(true);
-  back.parentNode.replaceChild(newBack,back);
-  newBack.addEventListener('click',closeFg);
-  newBack.addEventListener('touchend',function(e){e.preventDefault();closeFg();},{passive:false});
-
-  buildFgGrid();
-  document.getElementById('fgOv').classList.add('show');
-}
-function closeFg(){
-  document.getElementById('fgOv').classList.remove('show');
-  S.mode='chest';save();applyMode('chest');
-}
-function buildFgGrid(){
-  const grid=document.getElementById('fgGrid');
-  grid.innerHTML='';
-  for(let i=0;i<12;i++){
-    const cell=document.createElement('div');
-    cell.className='fg-cell';
-    cell.id='fgc'+i;
-    cell.dataset.i=i;
-    cell.innerHTML=`<span class="em" style="pointer-events:none">${FG_EM[i]}</span><span class="nm" style="pointer-events:none">${i+1}</span>`;
-    // Bind directly to each cell
-    cell.addEventListener('touchstart',function(e){
-      if(fgDone)return;
-      e.preventDefault();
-      e.stopPropagation();
-      for(const t of e.changedTouches){
-        if(fgT[t.identifier]!==undefined)continue;
-        if(Object.values(fgT).includes(i))continue;
-        fgT[t.identifier]=i;
-        cell.classList.add('held');
-        updFgUI();
-      }
-    },{passive:false});
-    cell.addEventListener('touchend',function(e){
-      if(fgDone)return;
-      e.preventDefault();
-      e.stopPropagation();
-      for(const t of e.changedTouches){
-        if(fgT[t.identifier]===i){
-          cell.classList.remove('held');
-          delete fgT[t.identifier];
-          updFgUI();
-        }
-      }
-    },{passive:false});
-    cell.addEventListener('touchcancel',function(e){
-      for(const t of e.changedTouches){
-        if(fgT[t.identifier]===i){
-          cell.classList.remove('held');
-          delete fgT[t.identifier];
-          updFgUI();
-        }
-      }
-    },{passive:false});
-    grid.appendChild(cell);
-  }
-}
-function updFgUI(){
-  const n=Object.keys(fgT).length;
-  const btn=document.getElementById('fgBtn');
-  if(n>=2){
-    document.getElementById('fgCnt').textContent=`已放 ${n} 隻手指，準備好！`;
-    btn.textContent=`🎲 開始抽籤（${n} 人）`;
-    btn.classList.add('show');
+  const trade={id:editTradeId||Date.now()+'',ticker,date,type:ttype,shares:shares||'0',price:price||'0',fee,currency:cur,source:src,notes,dividend:dividend||'0',createdAt:new Date().toISOString()};
+  if(editTradeId){
+    const idx=DB.trades.findIndex(t=>t.id===editTradeId);
+    if(idx>=0){ trade.createdAt=DB.trades[idx].createdAt||trade.createdAt; DB.trades[idx]=trade; }
+    editTradeId='';
+    document.querySelector('#pg-add h1').textContent='Add Trade';
   } else {
-    document.getElementById('fgCnt').textContent=n===0?'等緊大家放手指...':'已放 1 隻手指，等多一人...';
-    btn.classList.remove('show');
+    DB.trades.push(trade);
   }
+  save();
+  queueSync('saveTrade', {trade});
+  toast('已儲存 ✓');
+  setTimeout(()=>showPage('invest',document.querySelectorAll('.nb')[3]),500);
 }
-function fgPick(){
-  const held=Object.values(fgT);
-  if(held.length<2||fgDone)return;
-  fgDone=true;
-  document.getElementById('fgBtn').classList.remove('show');
-  document.getElementById('fgCnt').textContent='抽緊...';
-  let fi=0;
-  // First: dim all held cells immediately
-  held.forEach(i=>{
-    const c=document.getElementById('fgc'+i);
-    if(c) c.style.background='rgba(255,255,255,.04)';
-  });
-  // Then: randomly highlight one at a time, getting slower
-  function flash(){
-    // clear last highlight
-    held.forEach(i=>{
-      const c=document.getElementById('fgc'+i);
-      if(c) c.style.background='rgba(255,255,255,.04)';
-    });
-    // light up one random cell
-    const f=held[Math.floor(Math.random()*held.length)];
-    const fc=document.getElementById('fgc'+f);
-    if(fc) fc.style.background='rgba(252,211,77,.55)';
-    fi++;
-    if(fi<14) setTimeout(flash, fi<6?100:fi<11?180:280);
-    else setTimeout(fgReveal,300);
+
+// ══════════════════════════════════════════════════
+// FUND SAVE
+// ══════════════════════════════════════════════════
+function toggleCNYFields(){
+  const type=document.getElementById('fe-type').value;
+  document.getElementById('cny-pool-info').style.display=type==='cny-pool'?'':'none';
+  // Auto-set currency for CNY pool
+  if(type==='cny-pool') document.getElementById('fe-cur').value='CNY';
+}
+
+function openCNYConvert(poolId, source, totalCNY, convertedCNY){
+  const remaining=totalCNY-convertedCNY;
+  const pool=DB.funds.find(f=>f.id===poolId);
+  document.getElementById('cny-pool-label').textContent=`¥${fmt(totalCNY,0)} (${SL[source]})`;
+  document.getElementById('cny-already-converted').textContent=`¥${fmt(convertedCNY,0)}`;
+  document.getElementById('cny-remaining').textContent=`¥${fmt(remaining,0)}`;
+  document.getElementById('cv-cny').value='';
+  document.getElementById('cv-rate').value='';
+  document.getElementById('cv-aud').value='';
+  document.getElementById('cv-date').value=today();
+  document.getElementById('cv-notes').value='';
+  document.getElementById('m-cny-convert').dataset.poolId=poolId;
+  document.getElementById('m-cny-convert').dataset.source=source;
+  document.getElementById('m-cny-convert').dataset.remaining=remaining;
+  openModal('m-cny-convert');
+}
+
+function calcConversion(){
+  const cny=parseFloat(document.getElementById('cv-cny').value)||0;
+  const rate=parseFloat(document.getElementById('cv-rate').value)||0;
+  if(cny>0&&rate>0) document.getElementById('cv-aud').value=(cny*rate).toFixed(2);
+}
+
+async function saveConversion(){
+  const poolId=document.getElementById('m-cny-convert').dataset.poolId;
+  const source=document.getElementById('m-cny-convert').dataset.source;
+  const remaining=parseFloat(document.getElementById('m-cny-convert').dataset.remaining)||0;
+  const cnyAmt=parseFloat(document.getElementById('cv-cny').value)||0;
+  const audAmt=parseFloat(document.getElementById('cv-aud').value)||0;
+  const date=document.getElementById('cv-date').value;
+  const notes=document.getElementById('cv-notes').value;
+
+  if(!cnyAmt||!audAmt||!date){toast('請填入 CNY 金額、AUD 金額和日期');return;}
+  if(cnyAmt>remaining+0.01){toast(`⚠️ 超過剩餘未換額 ¥${fmt(remaining,0)}`);return;}
+
+  const fund={
+    id:Date.now()+'',
+    type:'cny-convert',
+    source, date,
+    amount:audAmt.toString(),
+    currency:'AUD',
+    startDate:date,
+    convertedDate:date,
+    cnyPoolId:poolId,
+    cnyAmount:cnyAmt.toString(),
+    notes:notes||`¥${cnyAmt} → A$${audAmt}`,
+    closed:'', closedDate:'',
+    createdAt:new Date().toISOString()
+  };
+  DB.funds.push(fund); save();
+  queueSync('saveFund',{fund});
+  closeModal('m-cny-convert');
+  renderFunds();
+  toast(`換匯完成：¥${fmt(cnyAmt,0)} → A$${fmt(audAmt)} ✓`);
+}
+
+async function saveFund(){
+  if(!requireReady()) return;
+  const type=document.getElementById('fe-type').value;
+  const src=document.getElementById('fe-src').value;
+  const date=document.getElementById('fe-date').value;
+  const currency=document.getElementById('fe-cur').value;
+  const amount=document.getElementById('fe-amt').value;
+  const notes=document.getElementById('fe-notes').value;
+
+  if(!amount||!date){toast('Fill amount and date');return;}
+
+  const editId=document.getElementById('m-fund').dataset.editId||'';
+  let fund={
+    id: editId||Date.now()+'',
+    type, source:src, date, startDate:date,
+    amount, currency,
+    convertedDate:'', cnyOriginal:'', cnyPoolId:'', cnyAmount:'',
+    notes,
+    closed: type==='repay-full',
+    closedDate: type==='repay-full'?date:'',
+    createdAt: new Date().toISOString()
+  };
+
+  if(editId){
+    const idx=DB.funds.findIndex(x=>x.id===editId);
+    if(idx>=0){ fund.createdAt=DB.funds[idx].createdAt||fund.createdAt; DB.funds[idx]=fund; }
+    document.getElementById('m-fund').dataset.editId='';
+    document.querySelector('#m-fund .mt').textContent='新增資金記錄';
+  } else {
+    DB.funds.push(fund);
   }
-  flash();
-  function fgReveal(){
-    held.forEach(i=>{const c=document.getElementById('fgc'+i);if(c)c.style.background='';});
-    const wi=held[Math.floor(Math.random()*held.length)];
-    held.forEach(i=>{
-      const c=document.getElementById('fgc'+i);if(!c)return;
-      c.classList.remove('held');
-      if(i===wi){
-        c.classList.add('winner');
-        // pulse the winner cell
-        let pulse=0;
-        const pTimer=setInterval(()=>{
-          pulse++;
-          c.style.background=pulse%2===0?'rgba(252,211,77,.5)':'rgba(252,211,77,.15)';
-          if(pulse>=10){clearInterval(pTimer);c.style.background='rgba(252,211,77,.35)';}
-        },300);
+  save();
+  queueSync('saveFund',{fund});
+  closeFundModal(); renderFunds(); toast(editId?'已更新 ✓':'已儲存 ✓');
+}
+
+function exportExcel(){
+  // Export trades as CSV
+  const tradeHeader='Date,Ticker,Type,Shares,Price,Fee,Currency,Source,Notes,Dividend';
+  const tradeRows=DB.trades.map(t=>[t.date,t.ticker,t.type,t.shares,t.price,t.fee,t.currency||'USD',t.source,t.notes||'',t.dividend||'0'].join(','));
+  const fundHeader='Date,Type,Source,Amount,Currency,Notes,ConvertedDate,Closed';
+  const fundRows=DB.funds.map(f=>[f.date,f.type,f.source,f.amount,f.currency||'AUD',f.notes||'',f.convertedDate||'',f.closed||''].join(','));
+  const csv='TRADES\n'+tradeHeader+'\n'+tradeRows.join('\n')+'\n\nFUNDS\n'+fundHeader+'\n'+fundRows.join('\n');
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download='tc-invest-'+today()+'.csv';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  toast('Excel CSV exported ✓');
+}
+
+// ══════════════════════════════════════════════════
+// SETTINGS
+// ══════════════════════════════════════════════════
+function initSettingsForm(){
+  document.getElementById('s-url').value=DB.settings.scriptUrl||'';
+  document.getElementById('s-key').value=DB.settings.finnhubKey||'';
+  document.getElementById('s-audusd').value=(DB.settings.audUsd||0.635).toFixed(4);
+  document.getElementById('s-eurusd').value=(DB.settings.eurUsd||1.08).toFixed(4);
+  document.getElementById('s-audcny').value=(DB.settings.audCny||4.65).toFixed(4);
+  updateRateHint('audusd');
+  updateRateHint('eurusd');
+  updateRateHint('audcny');
+  document.getElementById('s-me-off').value=DB.settings.meOffset||0;
+  document.getElementById('s-ane-off').value=DB.settings.aneOffset||0;
+  document.getElementById('s-od-off').value=DB.settings.odosanOffset||0;
+  document.getElementById('s-manual-rate').value=DB.settings.manualRate||0;
+  updateRBAChips(DB.settings.rbaRate+'%');
+  renderTickers();
+}
+async function saveAndTest(){
+  DB.settings.scriptUrl=document.getElementById('s-url').value.trim();
+  DB.settings.finnhubKey=document.getElementById('s-key').value.trim();
+  DB.settings.audUsd=parseFloat(document.getElementById('s-audusd').value)||0.635;
+  DB.settings.eurUsd=parseFloat(document.getElementById('s-eurusd').value)||1.08;
+  save();
+  const st=document.getElementById('conn-st');
+  if(DB.settings.scriptUrl){
+    st.textContent='Testing…';
+    try{
+      await sheetsCall('saveSetting',{key:'finnhubKey',value:DB.settings.finnhubKey});
+      await sheetsCall('saveSetting',{key:'tickers',value:JSON.stringify(DB.settings.tickers)});
+      st.style.color='var(--up)';st.textContent='✓ Connected!';
+      toast('Connected ✓');
+      // Also fetch RBA now
+      await fetchRBA();
+    }catch(e){st.style.color='var(--dn)';st.textContent='✗ '+e.message;}
+  } else {toast('Saved (no URL)');}
+}
+function saveRateSettings(){
+  DB.settings.meOffset=parseFloat(document.getElementById('s-me-off').value)||0;
+  DB.settings.aneOffset=parseFloat(document.getElementById('s-ane-off').value)||0;
+  DB.settings.odosanOffset=parseFloat(document.getElementById('s-od-off').value)||0;
+  DB.settings.manualRate=parseFloat(document.getElementById('s-manual-rate').value)||0;
+  save();
+  if(DB.settings.scriptUrl){
+    sheetsCall('saveSetting',{key:'meOffset',value:String(DB.settings.meOffset)}).catch(()=>{});
+    sheetsCall('saveSetting',{key:'aneOffset',value:String(DB.settings.aneOffset)}).catch(()=>{});
+    sheetsCall('saveSetting',{key:'odosanOffset',value:String(DB.settings.odosanOffset)}).catch(()=>{});
+  }
+  toast('Rate settings saved ✓');
+}
+function renderTickers(){
+  document.getElementById('tickers-wrap').innerHTML=(DB.settings.tickers||[]).map(t=>`<span class="ttag">${t}<button class="rm" onclick="removeTicker('${t}')">×</button></span>`).join('');
+}
+function addTicker(){
+  const inp=document.getElementById('new-tick');
+  const t=inp.value.trim().toUpperCase();
+  if(!t){toast('Enter ticker');return;}
+  if(DB.settings.tickers.includes(t)){toast('Already exists');return;}
+  DB.settings.tickers.push(t);inp.value='';save();renderTickers();
+  if(DB.settings.scriptUrl) sheetsCall('saveSetting',{key:'tickers',value:JSON.stringify(DB.settings.tickers)}).catch(()=>{});
+  toast(t+' added ✓');
+}
+function removeTicker(t){
+  DB.settings.tickers=DB.settings.tickers.filter(x=>x!==t);save();renderTickers();
+}
+function deleteTrade(id){
+  if(!confirm('確定刪除這筆交易？')) return;
+  DB.trades=DB.trades.filter(t=>t.id!==id); save();
+  queueSync('deleteTrade',{id});
+  closeModal('m-stock'); renderCurrentPage(); toast('交易已刪除 ✓');
+}
+
+async function pushAllToSheets(){
+  if(!DB.settings.scriptUrl){ toast('請先設定 Apps Script URL'); return; }
+  // Safety check: don't push if local data is empty
+  if(DB.trades.length === 0 && DB.funds.length === 0){
+    toast('⚠️ 本地冇數據，唔推送（防止覆蓋 Sheets）'); return;
+  }
+  if(!confirm(`確認將本地 ${DB.trades.length} 筆交易 + ${DB.funds.length} 筆資金記錄上傳到 Google Sheets？`)) return;
+  setSS('busy',`Pushing ${DB.trades.length} trades + ${DB.funds.length} funds…`);
+  let ok=0, fail=0;
+  for(const t of DB.trades){
+    try{ await sheetsCall('saveTrade',{trade:t}); ok++; }
+    catch(e){ fail++; }
+  }
+  for(const f of DB.funds){
+    try{ await sheetsCall('saveFund',{fund:f}); ok++; }
+    catch(e){ fail++; }
+  }
+  try{
+    await sheetsCall('saveSetting',{key:'finnhubKey',value:DB.settings.finnhubKey||''});
+    await sheetsCall('saveSetting',{key:'rbaRate',value:String(DB.settings.rbaRate||4.35)});
+    await sheetsCall('saveSetting',{key:'tickers',value:JSON.stringify(DB.settings.tickers)});
+  }catch(e){}
+  setSS('ok',`已上傳 ${ok} 筆${fail>0?' · '+fail+' 失敗':''}`, new Date().toLocaleTimeString());
+  toast(`✅ Push 完成！${ok} 筆成功${fail>0?' · '+fail+' 失敗':''}`);
+}
+
+function exportBackup(){
+  const b=new Blob([JSON.stringify(DB,null,2)],{type:'application/json'});
+  const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download='tc-invest-'+today()+'.json';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+}
+function importBackup(ev){
+  const f=ev.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=async e=>{
+    try{
+      const imported=JSON.parse(e.target.result);
+      const existingTradeIds=new Set(DB.trades.map(t=>t.id));
+      const existingFundIds=new Set(DB.funds.map(f=>f.id));
+      let addedTrades=0, addedFunds=0;
+      if(imported.trades) imported.trades.forEach(t=>{ if(!existingTradeIds.has(t.id)){DB.trades.push(t);addedTrades++;} });
+      if(imported.funds)  imported.funds.forEach(f=>{ if(!existingFundIds.has(f.id)){DB.funds.push(f);addedFunds++;} });
+      if(imported.prices) Object.assign(DB.prices, imported.prices);
+      save();
+      toast(`匯入：+${addedTrades} trades, +${addedFunds} funds — 正在同步到 Sheets…`);
+      renderDash();
+      // Push to Sheets immediately
+      if(DB.settings.scriptUrl){
+        setSS('busy','Syncing to Google Sheets…');
+        try{
+          // Push all trades and funds
+          const newTrades=imported.trades||[];
+          const newFunds=imported.funds||[];
+          for(const t of newTrades){ try{ await sheetsCall('saveTrade',{trade:t}); }catch(e){} }
+          for(const f of newFunds){ try{ await sheetsCall('saveFund',{fund:f}); }catch(e){} }
+          setSS('ok','Synced to Sheets ✓', new Date().toLocaleTimeString());
+          toast(`✅ 已同步到 Google Sheets！+${addedTrades} trades, +${addedFunds} funds`);
+        }catch(err){
+          setSS('err','Sync failed — use "Push All to Sheets" button');
+          toast('⚠️ Sync failed — 請用 Push All to Sheets');
+        }
       } else {
-        c.classList.add('loser');
+        toast(`匯入完成：+${addedTrades} trades, +${addedFunds} funds（未連接 Sheets）`);
       }
-    });
-    document.getElementById('fgWin').textContent=FG_EM[wi]+' 格'+(wi+1)+' 先手！';
-    document.getElementById('fgCnt').textContent='🎉 結果出爐！';
-    document.getElementById('fgRes').classList.add('show');
-    startConf();setTimeout(stopConf,4500);
-    // Rebind replay button
-    const btn=document.getElementById('fgBtn');
-    const newBtn=btn.cloneNode(true);
-    btn.parentNode.replaceChild(newBtn,btn);
-    newBtn.textContent='🔄 再玩一次';
-    newBtn.classList.add('show');
-    newBtn.addEventListener('click',openFg);
-    newBtn.addEventListener('touchend',function(e){e.preventDefault();openFg();},{passive:false});
-  }
+    }catch(e){toast('Error parsing file');}
+  };
+  r.readAsText(f);
+}
+function resetAll(){
+  if(!confirm('Delete ALL data?'))return;
+  DB={...DB,trades:[],funds:[],prices:{},rates:{}};
+  save();renderDash();toast('Reset done');
 }
 
-// ── CELEB ──
-function showCeleb(w,p){
-  document.getElementById('cWin').textContent=w;
-  const pd=document.getElementById('cPun');
-  if(p){pd.textContent='🎁 '+p;pd.style.display='block';}else pd.style.display='none';
-  document.getElementById('celeb').classList.add('show');
-  startConf();
-}
-function closeCeleb(e){if(e)e.stopPropagation();document.getElementById('celeb').classList.remove('show');stopConf();}
-function startConf(){
-  const cv=document.getElementById('ccanvas'),ctx=cv.getContext('2d');
-  cv.width=window.innerWidth;cv.height=window.innerHeight;
-  const CC=['#F97316','#F43F5E','#F59E0B','#10B981','#8B5CF6','#06B6D4','#FCD34D','#EC4899'];
-  const ps=Array.from({length:130},()=>({x:Math.random()*cv.width,y:Math.random()*cv.height-cv.height,w:Math.random()*10+5,h:Math.random()*5+3,col:CC[Math.floor(Math.random()*CC.length)],rot:Math.random()*Math.PI*2,rs:(Math.random()-.5)*.15,vx:(Math.random()-.5)*3,vy:Math.random()*4+2,op:1}));
-  function fr(){
-    ctx.clearRect(0,0,cv.width,cv.height);
-    ps.forEach(p=>{
-      p.x+=p.vx;p.y+=p.vy;p.rot+=p.rs;
-      if(p.y>cv.height*.7)p.op-=.015;
-      if(p.y>cv.height+20){p.y=-10;p.x=Math.random()*cv.width;p.op=1;}
-      ctx.save();ctx.globalAlpha=Math.max(0,p.op);ctx.translate(p.x,p.y);ctx.rotate(p.rot);
-      ctx.fillStyle=p.col;ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);ctx.restore();
-    });
-    cfAF=requestAnimationFrame(fr);
-  }
-  if(cfAF)cancelAnimationFrame(cfAF);
-  fr();
-}
-function stopConf(){if(cfAF){cancelAnimationFrame(cfAF);cfAF=null;}const cv=document.getElementById('ccanvas');cv.getContext('2d').clearRect(0,0,cv.width,cv.height);}
+// ══════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════
+load(); // load local settings only (for URL/key)
+document.getElementById('fe-date').value=today();
+// Sync version number everywhere
+document.getElementById('ver-badge').textContent=VERSION;
+document.querySelector('#pg-more .ph-sub').textContent=VERSION+' · Connection & preferences';
+document.getElementById('dash-date').textContent=new Date().toLocaleDateString('en-AU',{weekday:'long',day:'numeric',month:'long'});
+updateRBAChips(DB.settings.rbaRate+'%');
 
-// ── SHARE ──
-function shareApp(){
-  const d=btoa(encodeURIComponent(JSON.stringify({items:S.items,punishments:S.punishments})));
-  const url=location.origin+location.pathname+'?d='+d;
-  if(navigator.share)navigator.share({title:'食咩？',text:'一齊抽！',url});
-  else navigator.clipboard.writeText(url).then(()=>showToast('連結已複製 🎉'));
+// Show skeleton UI immediately, but data comes from cloud
+if(!DB.settings.scriptUrl){
+  setSS('err','請在設定填入 Apps Script URL — 數據唔會保存');
+  appReady = true; // allow local-only mode if no URL configured
+  renderDash();
+} else {
+  setSS('busy','Loading data from Google Sheets…');
+  renderDash();
+  setTimeout(async()=>{
+    const ok = await syncFromSheets();
+    syncLoaded = true; // now safe to push writes
+    if(ok){
+      await fetchRBA();
+      await fetchRates();
+    }
+    await flushSyncQueue(); // push anything queued before load
+    renderDash();
+  }, 500);
 }
-function showToast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2500);}
 </script>
 </body>
 </html>

@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-title" content="食咩">
 <meta name="theme-color" content="#F97316">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23F97316'/%3E%3Ctext x='50' y='72' font-size='62' text-anchor='middle' font-family='sans-serif' fill='white'%3E食%3C/text%3E%3C/svg%3E">
-<title>食咩？ v2.4</title>
+<title>食咩？ v2.5</title>
 <style>
 :root{--or:#F97316;--ord:#EA6A00;--orl:#FFF7ED;--orm:#FFEDD5;--ro:#F43F5E;--go:#F59E0B;--sl:#1E293B;--slm:#475569;--sll:#F8FAFC;--bd:#E2E8F0;--wh:#fff;--r:14px;--rs:10px}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -158,7 +158,7 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
   <header>
     <div class="logo">
       <div class="logo-icon">食</div>
-      <div class="logo-text">今晚<em>食咩</em>？<span class="logo-ver">v2.4</span></div>
+      <div class="logo-text">今晚<em>食咩</em>？<span class="logo-ver">v2.5</span></div>
     </div>
     <button class="hbtn" onclick="shareApp()">📤 分享</button>
   </header>
@@ -276,6 +276,71 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
 
 <div class="toast" id="toast"></div>
 
+<script type="module">
+// ── FIREBASE ──
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCt64Lu0QBqSWENHwoyv-5EfZhgUfooA8g",
+  authDomain: "foodpicking-and-random.firebaseapp.com",
+  databaseURL: "https://foodpicking-and-random-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "foodpicking-and-random",
+  storageBucket: "foodpicking-and-random.firebasestorage.app",
+  messagingSenderId: "282354344161",
+  appId: "1:282354344161:web:c9ef9b57dfd6e4f83757a0",
+  measurementId: "G-F30K31EQFJ"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const dbRef = ref(db, 'foodpicker/data');
+
+// Cloud save - only items, weights, punishments (not mode/UI state)
+window.cloudSave = function(S) {
+  set(dbRef, {
+    items: S.items,
+    weights: S.weights,
+    punishments: S.punishments
+  }).catch(e => console.log('Cloud save error:', e));
+};
+
+// Listen for cloud changes
+onValue(dbRef, (snapshot) => {
+  const d = snapshot.val();
+  if (!d) return;
+  if (window._cloudLoaded) {
+    // Subsequent updates from other devices
+    if (d.items && Array.isArray(d.items) && d.items.length >= 2) {
+      window._S.items = d.items;
+      window._S.weights = d.weights || {};
+      window._S.punishments = d.punishments || window._S.punishments;
+      window._S.items.forEach(it => { if (!window._S.weights[it]) window._S.weights[it] = 1; });
+      if (window.renderItems) { window.renderItems(); window.renderW(); window.renderP(); }
+      if (window._S.mode === 'chest') window.buildChests();
+      if (window._S.mode === 'elim') { window.eReset(); window.buildWheelCanvas(); window.updEInfo(); }
+      showCloudToast('☁️ 雲端數據已同步');
+    }
+  } else {
+    // First load - use cloud data
+    window._cloudLoaded = true;
+    if (d.items && Array.isArray(d.items) && d.items.length >= 2) {
+      window._S.items = d.items;
+      window._S.weights = d.weights || {};
+      window._S.punishments = d.punishments || window._S.punishments;
+      window._S.items.forEach(it => { if (!window._S.weights[it]) window._S.weights[it] = 1; });
+      if (window.renderItems) { window.renderItems(); window.renderW(); window.renderP(); }
+      if (window._S.mode === 'chest') window.buildChests();
+    }
+  }
+});
+
+function showCloudToast(msg) {
+  const el = document.getElementById('toast');
+  if (el) { el.textContent = msg; el.classList.add('show'); setTimeout(() => el.classList.remove('show'), 2500); }
+}
+</script>
+
 <script>
 // ── COLORS ──
 const C=['#F97316','#F43F5E','#8B5CF6','#06B6D4','#10B981','#F59E0B','#3B82F6','#EC4899','#14B8A6','#EF4444'];
@@ -290,10 +355,14 @@ let fgT={},fgDone=false;
 let cfAF=null;
 
 // ── STATE ──
-const LSK='fmp4'; // new key avoids old cache conflicts
+const LSK='fmp4';
 let S={items:['火鍋','燒烤','壽司','川菜','泰國菜','茶餐廳'],weights:{},punishments:['請大家飲奶茶','負責訂位','發搞笑限動','講一個冷笑話','下次你揀'],usePunish:true,useWeight:false,mode:'chest'};
+window._S = S; // expose for Firebase module
 
-function save(){try{localStorage.setItem(LSK,JSON.stringify(S))}catch(e){}}
+function save(){
+  try{localStorage.setItem(LSK,JSON.stringify(S))}catch(e){}
+  if(window.cloudSave) window.cloudSave(S); // sync to cloud
+}
 function load(){
   try{
     const r=localStorage.getItem(LSK);
@@ -327,6 +396,10 @@ function load(){
 load();
 renderItems(); renderW(); renderP();
 applyMode(S.mode);
+// Expose functions for Firebase sync
+window.renderItems=renderItems; window.renderW=renderW; window.renderP=renderP;
+window.buildChests=buildChests; window.eReset=eReset;
+window.buildWheelCanvas=buildWheelCanvas; window.updEInfo=updEInfo;
 
 // ── ITEMS ──
 function addItem(){

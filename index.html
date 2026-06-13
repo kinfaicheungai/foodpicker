@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-title" content="今次揀咩">
 <meta name="theme-color" content="#F97316">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23F97316'/%3E%3Ctext x='50' y='72' font-size='58' text-anchor='middle' font-family='sans-serif' fill='white'%3E%E9%81%B8%3C/text%3E%3C/svg%3E">
-<title>今次揀咩 v3.6</title>
+<title>今次揀咩 v4.0</title>
 <style>
 :root{
   --or:#F97316;--ord:#EA6A00;--orl:#FFF7ED;--orm:#FFEDD5;
@@ -23,7 +23,10 @@ body{font-family:-apple-system,"Helvetica Neue",sans-serif;background:#F8FAFC;mi
 
 /* ── PAGES ── */
 .page{display:none;min-height:100vh;flex-direction:column}
-.page.active{display:flex}
+.page.active{display:flex;animation:pageIn .35s cubic-bezier(.22,1,.36,1)}
+@keyframes pageIn{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:translateX(0)}}
+#pgHome.active{animation:homeIn .4s ease-out}
+@keyframes homeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
 /* ── HOME PAGE ── */
 #pgHome{background:linear-gradient(160deg,#FFF7ED,#FFF1F2)}
@@ -38,9 +41,10 @@ body{font-family:-apple-system,"Helvetica Neue",sans-serif;background:#F8FAFC;mi
 /* List cards */
 .section-title{font-size:13px;font-weight:700;color:var(--slm);text-transform:uppercase;letter-spacing:.5px;margin:16px 0 10px}
 .list-cards{display:flex;flex-direction:column;gap:10px}
-.list-card{background:var(--wh);border-radius:var(--r);box-shadow:0 1px 4px rgba(0,0,0,.07);padding:16px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:transform .15s,box-shadow .15s;border:1.5px solid transparent}
-.list-card:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.1)}
-.list-card:active{transform:scale(.98)}
+.list-card{background:var(--wh);border-radius:var(--r);box-shadow:0 2px 8px rgba(249,115,22,.06),0 1px 3px rgba(0,0,0,.05);padding:16px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:transform .2s cubic-bezier(.34,1.56,.64,1),box-shadow .2s;border:1.5px solid transparent;animation:cardIn .45s cubic-bezier(.22,1,.36,1) backwards}
+@keyframes cardIn{from{opacity:0;transform:translateY(16px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+.list-card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(249,115,22,.12),0 2px 6px rgba(0,0,0,.06)}
+.list-card:active{transform:scale(.97);transition-duration:.08s}
 .card-emoji{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
 .card-info{flex:1;min-width:0}
 .card-name{font-size:16px;font-weight:700;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -55,9 +59,13 @@ body{font-family:-apple-system,"Helvetica Neue",sans-serif;background:#F8FAFC;mi
 
 /* Finger entry */
 /* Quick entries */
-.quick-entry{background:var(--sl);border-radius:var(--r);padding:16px;cursor:pointer;transition:transform .15s;text-align:center}
-.quick-entry:active{transform:scale(.96)}
-.qe-icon{font-size:32px;margin-bottom:6px}
+.quick-entry{background:linear-gradient(135deg,#1E293B,#0F172A);border-radius:var(--r);padding:16px;cursor:pointer;transition:transform .2s cubic-bezier(.34,1.56,.64,1),box-shadow .2s;text-align:center;position:relative;overflow:hidden;box-shadow:0 4px 12px rgba(15,23,42,.2);animation:cardIn .45s cubic-bezier(.22,1,.36,1) backwards}
+.quick-entry::before{content:'';position:absolute;top:-50%;left:-60%;width:40%;height:200%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);transform:rotate(20deg);transition:left .5s}
+.quick-entry:hover::before{left:130%}
+.quick-entry:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(15,23,42,.3)}
+.quick-entry:active{transform:scale(.95);transition-duration:.08s}
+.qe-icon{font-size:32px;margin-bottom:6px;display:inline-block;transition:transform .3s}
+.quick-entry:hover .qe-icon{transform:scale(1.15) rotate(-6deg)}
 .qe-title{font-size:15px;font-weight:700;color:#fff;margin-bottom:3px}
 .qe-sub{font-size:12px;color:rgba(255,255,255,.5)}
 
@@ -84,7 +92,8 @@ body{font-family:-apple-system,"Helvetica Neue",sans-serif;background:#F8FAFC;mi
 .irow input:focus{border-color:var(--or);background:var(--wh)}
 .badd{background:var(--or);color:#fff;border:none;border-radius:var(--rs);padding:10px 14px;font-size:20px;cursor:pointer;line-height:1;flex-shrink:0}
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;min-height:6px}
-.tag{display:inline-flex;align-items:center;gap:4px;background:var(--orm);border-radius:50px;padding:5px 10px;font-size:14px;font-weight:500}
+.tag{display:inline-flex;align-items:center;gap:4px;background:var(--orm);border-radius:50px;padding:5px 10px;font-size:14px;font-weight:500;animation:tagIn .3s cubic-bezier(.34,1.56,.64,1) backwards}
+@keyframes tagIn{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
 .tx{background:none;border:none;color:#94A3B8;cursor:pointer;font-size:13px;padding:0;line-height:1}
 .tx:hover{color:var(--ro)}
 
@@ -106,15 +115,24 @@ body{font-family:-apple-system,"Helvetica Neue",sans-serif;background:#F8FAFC;mi
 /* Chest */
 .chest-grid{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding:4px 0 8px}
 .chest-item{width:76px;text-align:center;cursor:pointer}
-.chest-box{width:76px;height:76px;border-radius:14px;background:var(--orl);border:2px solid var(--bd);display:flex;align-items:center;justify-content:center;font-size:30px;position:relative;overflow:hidden;transition:all .25s}
-.chest-item:hover .chest-box{border-color:var(--go)}
+.chest-box{width:76px;height:76px;border-radius:14px;background:linear-gradient(145deg,#FFF7ED,#FFEDD5);border:2px solid var(--bd);display:flex;align-items:center;justify-content:center;font-size:30px;position:relative;overflow:hidden;transition:all .25s;box-shadow:0 2px 6px rgba(249,115,22,.08)}
+.chest-item:hover .chest-box{border-color:var(--go);transform:translateY(-3px);box-shadow:0 6px 14px rgba(245,158,11,.25)}
+.chest-item:active .chest-box{transform:scale(.92)}
+@keyframes chestShake{0%,100%{transform:rotate(0)}15%{transform:rotate(-8deg) scale(1.05)}30%{transform:rotate(8deg) scale(1.08)}45%{transform:rotate(-6deg) scale(1.1)}60%{transform:rotate(6deg) scale(1.12)}75%{transform:rotate(-3deg) scale(1.15)}90%{transform:rotate(2deg) scale(1.18)}}
+.chest-box.shaking{animation:chestShake .55s ease-in-out forwards}
+@keyframes chestBurst{0%{box-shadow:0 0 0 0 rgba(252,211,77,.8),0 0 0 0 rgba(245,158,11,.5)}100%{box-shadow:0 0 0 24px rgba(252,211,77,0),0 0 0 48px rgba(245,158,11,0)}}
+.chest-box.burst{animation:chestBurst .7s ease-out forwards}
+@keyframes chestRevealPop{0%{transform:scale(.6);opacity:0}60%{transform:scale(1.12)}100%{transform:scale(1);opacity:1}}
+.chest-box.revealed{animation:chestRevealPop .45s cubic-bezier(.34,1.56,.64,1) forwards}
 .chest-item.faded{opacity:.3;pointer-events:none}
 .chest-num{font-size:11px;color:var(--slm);margin-top:4px}
 .chest-hint{text-align:center;font-size:13px;color:var(--slm);margin-top:6px}
 
 /* Elim wheel */
 .wheel-wrap{position:relative;display:flex;justify-content:center;align-items:center;padding:10px 0 6px}
-.wptr{position:absolute;top:4px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-top:24px solid var(--ro);z-index:10}
+.wptr{position:absolute;top:4px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-top:24px solid var(--ro);z-index:10;filter:drop-shadow(0 2px 3px rgba(244,63,94,.4));transform-origin:top center}
+@keyframes ptrBounce{0%,100%{transform:translateX(-50%) rotate(0)}25%{transform:translateX(-50%) rotate(-12deg)}50%{transform:translateX(-50%) rotate(8deg)}75%{transform:translateX(-50%) rotate(-4deg)}}
+.wptr.bounce{animation:ptrBounce .5s ease-out}
 .wctr{position:absolute;width:28px;height:28px;background:#fff;border-radius:50%;border:3px solid var(--bd);top:50%;left:50%;transform:translate(-50%,-50%);z-index:10}
 .einfo{text-align:center;font-size:13px;color:var(--slm);margin-bottom:6px}
 .einfo b{color:var(--ro)}
@@ -129,7 +147,9 @@ body{font-family:-apple-system,"Helvetica Neue",sans-serif;background:#F8FAFC;mi
 .dcb{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--bd);background:var(--sll);font-size:15px;font-weight:700;cursor:pointer;color:var(--slm)}
 .dcb.on{border-color:var(--or);background:var(--orl);color:var(--or)}
 .dice-faces-wrap{display:flex;justify-content:center;gap:16px;padding:8px 0;min-height:80px;align-items:center}
-.d-face{font-size:50px;line-height:1;display:inline-block;transition:transform .08s}
+.d-face{font-size:50px;line-height:1;display:inline-block;transition:transform .08s;filter:drop-shadow(0 3px 5px rgba(0,0,0,.15))}
+@keyframes diceLand{0%{transform:translateY(-18px) scale(1.2)}55%{transform:translateY(0) scale(.92)}75%{transform:translateY(-5px) scale(1.04)}100%{transform:translateY(0) scale(1)}}
+.d-face.land{animation:diceLand .5s cubic-bezier(.34,1.56,.64,1)}
 .d-face.shake{transform:rotate(18deg) scale(1.12)}
 .dice-total{text-align:center;font-size:15px;color:var(--sl);min-height:24px;font-weight:700;margin-top:4px}
 
@@ -143,9 +163,15 @@ body{font-family:-apple-system,"Helvetica Neue",sans-serif;background:#F8FAFC;mi
 .reh{font-size:14px;color:#64748B}
 
 /* Play btn */
-.bplay{width:100%;background:var(--or);color:#fff;border:none;border-radius:var(--r);padding:14px;font-size:16px;font-weight:800;cursor:pointer;transition:all .2s}
+.bplay{width:100%;background:linear-gradient(135deg,#F97316,#EA6A00);color:#fff;border:none;border-radius:var(--r);padding:14px;font-size:16px;font-weight:800;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;box-shadow:0 4px 12px rgba(249,115,22,.3)}
+.bplay:hover:not(:disabled){box-shadow:0 6px 18px rgba(249,115,22,.4);transform:translateY(-1px)}
+.bplay:active:not(:disabled){transform:scale(.97);transition-duration:.08s}
+.bplay::after{content:'';position:absolute;top:-50%;left:-60%;width:30%;height:200%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);transform:rotate(20deg);animation:btnShine 3s ease-in-out infinite}
+@keyframes btnShine{0%,70%{left:-60%}100%{left:130%}}
+.bplay:disabled::after{display:none}
 .bplay:disabled{background:#CBD5E1;cursor:not-allowed}
-.bplay.red{background:var(--ro)}
+.bplay.red{background:linear-gradient(135deg,#F43F5E,#E0294D);box-shadow:0 4px 12px rgba(244,63,94,.3)}
+.bplay.red:hover:not(:disabled){box-shadow:0 6px 18px rgba(244,63,94,.4)}
 .brow{display:flex;gap:8px;margin-top:8px}
 .bsec{flex:1;background:var(--wh);border:1.5px solid var(--bd);border-radius:var(--rs);padding:10px;font-size:14px;font-weight:600;cursor:pointer;color:var(--slm)}
 
@@ -183,7 +209,8 @@ body{font-family:-apple-system,"Helvetica Neue",sans-serif;background:#F8FAFC;mi
 .cbox{position:relative;z-index:2;text-align:center;padding:28px 24px;animation:cpop .5s cubic-bezier(.34,1.56,.64,1)}
 @keyframes cpop{0%{transform:scale(.4);opacity:0}65%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
 .clbl{font-size:14px;color:#94A3B8;margin-bottom:8px}
-.cwin{font-size:50px;font-weight:900;color:#FCD34D;line-height:1.1;margin-bottom:12px}
+.cwin{font-size:50px;font-weight:900;color:#FCD34D;line-height:1.1;margin-bottom:12px;animation:winGlow 1.5s ease-in-out infinite;text-shadow:0 0 30px rgba(252,211,77,.5)}
+@keyframes winGlow{0%,100%{text-shadow:0 0 25px rgba(252,211,77,.4)}50%{text-shadow:0 0 50px rgba(252,211,77,.8),0 0 80px rgba(245,158,11,.4)}}
 .cpun{background:rgba(244,63,94,.25);border:1px solid rgba(244,63,94,.35);border-radius:50px;padding:8px 20px;font-size:14px;color:#FDA4AF;margin-bottom:22px}
 .cclose{background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:50px;padding:11px 28px;font-size:14px;color:#fff;cursor:pointer;font-weight:600}
 
@@ -212,7 +239,9 @@ body{font-family:-apple-system,"Helvetica Neue",sans-serif;background:#F8FAFC;mi
 .wbar-wrap{width:50px;height:5px;background:var(--bd);border-radius:3px;overflow:hidden}
 .wbar{height:100%;background:var(--or);border-radius:3px}
 .wbtn{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--bd);background:var(--sll);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.wval{min-width:20px;text-align:center;font-size:14px;font-weight:700;color:var(--or)}
+.wval{min-width:20px;text-align:center;font-size:14px;font-weight:700;color:var(--or);display:inline-block}
+@keyframes valPop{0%{transform:scale(1)}50%{transform:scale(1.4);color:#EA6A00}100%{transform:scale(1)}}
+.wval.pop{animation:valPop .3s ease-out}
 .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--sl);color:#fff;padding:10px 20px;border-radius:50px;font-size:14px;font-weight:600;opacity:0;transition:opacity .3s;pointer-events:none;z-index:9999;white-space:nowrap}
 .toast.show{opacity:1}
 </style>
@@ -225,22 +254,25 @@ body{font-family:-apple-system,"Helvetica Neue",sans-serif;background:#F8FAFC;mi
     <div class="home-logo">
       <div class="logo-icon">選</div>
       <div>
-        <div class="logo-text">今次<em>揀咩</em>？<span class="logo-ver">v3.6</span></div>
+        <div class="logo-text">今次<em>揀咩</em>？<span class="logo-ver">v4.0</span></div>
       </div>
     </div>
-    <button class="hbtn" style="background:var(--wh);border:1px solid var(--bd);border-radius:50px;padding:7px 13px;font-size:13px;cursor:pointer;color:var(--slm)" onclick="shareHome()">📤 分享</button>
+    <div style="display:flex;gap:8px">
+      <button class="hbtn" id="soundTog" style="background:var(--wh);border:1px solid var(--bd);border-radius:50px;padding:7px 11px;font-size:15px;cursor:pointer" onclick="toggleSound()">🔊</button>
+      <button class="hbtn" style="background:var(--wh);border:1px solid var(--bd);border-radius:50px;padding:7px 13px;font-size:13px;cursor:pointer;color:var(--slm)" onclick="shareHome()">📤 分享</button>
+    </div>
   </div>
 
   <div class="home-body">
     <!-- Quick entries -->
     <div class="section-title">快速玩法</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:4px">
-      <div class="quick-entry" onclick="openFg()">
+      <div class="quick-entry" style="animation-delay:.02s" onclick="openFg()">
         <div class="qe-icon">👆</div>
         <div class="qe-title">手指抽籤</div>
         <div class="qe-sub">多人同時，隨機先手</div>
       </div>
-      <div class="quick-entry" onclick="openDicePage()">
+      <div class="quick-entry" style="animation-delay:.08s" onclick="openDicePage()">
         <div class="qe-icon">🎲</div>
         <div class="qe-title">骰子</div>
         <div class="qe-sub">1-3粒，純點數模擬</div>
@@ -477,6 +509,37 @@ onValue(ref(db,'picker/lists'), (snap) => {
 </script>
 
 <script>
+// ── SOUND & HAPTICS ──
+let soundOn = true;
+try { soundOn = localStorage.getItem('picker_sound') !== '0'; } catch(e){}
+let _actx = null;
+function actx(){ if(!_actx){ try{_actx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return _actx; }
+function tone(freq, dur, vol, type, delay) {
+  if(!soundOn) return;
+  const ctx = actx(); if(!ctx) return;
+  try {
+    const t0 = ctx.currentTime + (delay||0);
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = type||'sine'; o.frequency.value = freq;
+    o.connect(g); g.connect(ctx.destination);
+    g.gain.setValueAtTime(vol||.1, t0);
+    g.gain.exponentialRampToValueAtTime(.001, t0 + dur);
+    o.start(t0); o.stop(t0 + dur);
+  } catch(e){}
+}
+function sTick(){ tone(900,.04,.06,'square'); }
+function sPop(){ tone(520,.1,.12,'sine'); tone(780,.12,.08,'sine',.04); }
+function sOpen(){ tone(392,.12,.1,'triangle'); tone(523,.14,.1,'triangle',.08); tone(659,.2,.12,'triangle',.16); }
+function sWin(){ [523,659,784,1047].forEach((f,i)=>tone(f,.22,.12,'triangle',i*.11)); }
+function sRoll(){ tone(200+Math.random()*120,.05,.07,'square'); }
+function haptic(p){ try{ if(navigator.vibrate) navigator.vibrate(p); }catch(e){} }
+window.toggleSound = function(){
+  soundOn = !soundOn;
+  try{ localStorage.setItem('picker_sound', soundOn?'1':'0'); }catch(e){}
+  document.getElementById('soundTog').textContent = soundOn ? '🔊' : '🔇';
+  if(soundOn) sPop();
+};
+
 // ── COLORS ──
 const C=['#F97316','#F43F5E','#8B5CF6','#06B6D4','#10B981','#F59E0B','#3B82F6','#EC4899','#14B8A6','#EF4444'];
 const CHEST_EM=['🎁','📦','🧧','🪄','🎊','💎','🎀','🏺','🎈','🎉','⭐','🌟'];
@@ -518,6 +581,9 @@ window._initApp = function() {
     }
   } catch(e) {}
   renderLists();
+  // Init sound toggle icon
+  const st = document.getElementById('soundTog');
+  if (st) st.textContent = soundOn ? '🔊' : '🔇';
 };
 
 // ── NAVIGATION ──
@@ -553,8 +619,8 @@ function renderLists() {
     el.innerHTML = `<div style="text-align:center;padding:20px;color:var(--slm);font-size:14px">還未有列表，新增一個開始吧！</div>`;
     return;
   }
-  el.innerHTML = lists.map(l => `
-    <div class="list-card" onclick="openList('${l.id}')">
+  el.innerHTML = lists.map((l,i) => `
+    <div class="list-card" style="animation-delay:${.08+i*.06}s" onclick="openList('${l.id}')">
       <div class="card-emoji" style="background:${l.color||'#FFF7ED'}">${l.emoji||'🍽️'}</div>
       <div class="card-info">
         <div class="card-name">${l.name}</div>
@@ -669,7 +735,11 @@ window.chgW = function(idx, d) {
   if (!name) return;
   if (!window._curList.weights) window._curList.weights = {};
   window._curList.weights[name] = Math.max(1, Math.min(50, (window._curList.weights[name]||1) + d));
+  sTick(); haptic(8);
   saveCurrentList(); renderW(); renderItems();
+  // Pop animation on the changed value
+  const rows = document.querySelectorAll('#wPanel .wval');
+  if (rows[idx]) { rows[idx].classList.add('pop'); setTimeout(()=>rows[idx]&&rows[idx].classList.remove('pop'),320); }
 };
 function renderW() {
   const list = window._curList;
@@ -706,7 +776,7 @@ function renderItems() {
   const weights = list.weights || {};
   document.getElementById('itemTags').innerHTML = (list.items||[]).map((it,i)=> {
     const w = useWeight && (weights[it]||1) > 1 ? `<span style="font-size:11px;color:var(--or);font-weight:700">x${weights[it]}</span>` : '';
-    return `<span class="tag">${it}${w}<button class="tx" onclick="removeItem(${i})">✕</button></span>`;
+    return `<span class="tag" style="animation-delay:${i*.04}s">${it}${w}<button class="tx" onclick="removeItem(${i})">✕</button></span>`;
   }).join('');
   renderW();
   updateBtn();
@@ -855,15 +925,23 @@ window.pickChest = function(idx){
   if(!item||item.classList.contains('faded'))return;
   chestItems.forEach((_,i)=>{if(i!==idx)document.getElementById('ci'+i)?.classList.add('faded');});
   const box=document.getElementById('cb'+idx);
-  box.style.transition='all .3s';box.style.transform='scale(1.15)';
+  // Phase 1: shake with anticipation
+  sPop(); haptic(20);
+  box.classList.add('shaking');
+  let shakeTicks=0;
+  const st=setInterval(()=>{shakeTicks++;sTick();haptic(8);if(shakeTicks>=4)clearInterval(st);},130);
   setTimeout(()=>{
-    box.style.transform='scale(1)';
+    box.classList.remove('shaking');
+    // Phase 2: golden burst + reveal
+    box.classList.add('burst');
+    sOpen(); haptic([30,40,60]);
     box.textContent=chestItems[idx];
     box.style.fontSize='13px';box.style.fontWeight='700';
-    box.style.color='#92400E';box.style.background='#FEF3C7';box.style.borderColor='#F59E0B';
+    box.style.color='#92400E';box.style.background='linear-gradient(145deg,#FFFBEB,#FEF3C7)';box.style.borderColor='#F59E0B';
+    box.classList.add('revealed');
     item.classList.add('faded');item.style.opacity='1';item.style.pointerEvents='none';
-    setTimeout(()=>showR(chestItems[idx]),300);
-  },200);
+    setTimeout(()=>showR(chestItems[idx]),400);
+  },580);
   document.getElementById('chestHint').textContent='🎉 開咗啦！按「重新洗牌」再玩';
 };
 
@@ -900,6 +978,42 @@ function showElimPreview(){
   const savedPool=ePool;ePool=prev;buildWheelCanvas();ePool=savedPool;
 }
 
+function shadeColor(hex,amt){
+  const n=parseInt(hex.slice(1),16);
+  let r=(n>>16)+amt,g=((n>>8)&255)+amt,b=(n&255)+amt;
+  r=Math.max(0,Math.min(255,r));g=Math.max(0,Math.min(255,g));b=Math.max(0,Math.min(255,b));
+  return '#'+((r<<16)|(g<<8)|b).toString(16).padStart(6,'0');
+}
+function drawSector(ctx,cx,cy,r,s,e2,baseColor,hl){
+  ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,s,e2);ctx.closePath();
+  if(hl){ ctx.fillStyle='#FCD34D'; }
+  else {
+    const grad=ctx.createRadialGradient(cx,cy,r*.2,cx,cy,r);
+    grad.addColorStop(0,shadeColor(baseColor,28));
+    grad.addColorStop(.75,baseColor);
+    grad.addColorStop(1,shadeColor(baseColor,-22));
+    ctx.fillStyle=grad;
+  }
+  ctx.fill();ctx.strokeStyle='rgba(255,255,255,.9)';ctx.lineWidth=2;ctx.stroke();
+}
+function drawWheelChrome(ctx,cx,cy,r){
+  // Outer ring with depth
+  ctx.beginPath();ctx.arc(cx,cy,r+1,0,2*Math.PI);
+  ctx.strokeStyle='rgba(0,0,0,.08)';ctx.lineWidth=4;ctx.stroke();
+  // Gloss highlight on top half
+  const gloss=ctx.createLinearGradient(cx,cy-r,cx,cy);
+  gloss.addColorStop(0,'rgba(255,255,255,.18)');
+  gloss.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.beginPath();ctx.arc(cx,cy,r,Math.PI,2*Math.PI);ctx.closePath();
+  ctx.fillStyle=gloss;ctx.fill();
+  // Center hub with shadow
+  ctx.save();
+  ctx.shadowColor='rgba(0,0,0,.2)';ctx.shadowBlur=6;ctx.shadowOffsetY=2;
+  ctx.beginPath();ctx.arc(cx,cy,16,0,2*Math.PI);ctx.fillStyle='#fff';ctx.fill();
+  ctx.restore();
+  ctx.beginPath();ctx.arc(cx,cy,16,0,2*Math.PI);ctx.strokeStyle='#E2E8F0';ctx.lineWidth=3;ctx.stroke();
+  ctx.beginPath();ctx.arc(cx,cy,7,0,2*Math.PI);ctx.fillStyle='#F97316';ctx.fill();
+}
 function buildWheelCanvas(hl){
   const cv=document.getElementById('wCanvas'),ctx=cv.getContext('2d');
   const cx=130,cy=130,r=124;
@@ -912,26 +1026,23 @@ function buildWheelCanvas(hl){
     const arc2=2*Math.PI/preview.length;
     preview.forEach((item,i)=>{
       const s=eAngle+i*arc2-Math.PI/2,e2=s+arc2;
-      ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,s,e2);ctx.closePath();
-      ctx.fillStyle=C[i%C.length];ctx.fill();ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.stroke();
+      drawSector(ctx,cx,cy,r,s,e2,C[i%C.length],false);
       ctx.save();ctx.translate(cx,cy);ctx.rotate(s+arc2/2);ctx.textAlign='right';ctx.fillStyle='#fff';
       ctx.font=`bold ${preview.length>6?11:14}px -apple-system,sans-serif`;ctx.shadowColor='rgba(0,0,0,.3)';ctx.shadowBlur=3;
       ctx.fillText(item.length>5?item.slice(0,5)+'…':item,r-10,5);ctx.restore();
     });
-    ctx.beginPath();ctx.arc(cx,cy,16,0,2*Math.PI);ctx.fillStyle='#fff';ctx.fill();ctx.strokeStyle='#E2E8F0';ctx.lineWidth=3;ctx.stroke();
+    drawWheelChrome(ctx,cx,cy,r);
     return;
   }
   const arc=2*Math.PI/n;
   for(let i=0;i<n;i++){
     const s=eAngle+i*arc-Math.PI/2,e2=s+arc;
-    ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,s,e2);ctx.closePath();
-    ctx.fillStyle=hl===i?'#FCD34D':C[allItems.indexOf(ePool[i])%C.length];
-    ctx.fill();ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.stroke();
+    drawSector(ctx,cx,cy,r,s,e2,C[allItems.indexOf(ePool[i])%C.length],hl===i);
     ctx.save();ctx.translate(cx,cy);ctx.rotate(s+arc/2);ctx.textAlign='right';ctx.fillStyle='#fff';
     ctx.font=`bold ${n>6?11:14}px -apple-system,sans-serif`;ctx.shadowColor='rgba(0,0,0,.3)';ctx.shadowBlur=3;
     ctx.fillText(ePool[i].length>5?ePool[i].slice(0,5)+'…':ePool[i],r-10,5);ctx.restore();
   }
-  ctx.beginPath();ctx.arc(cx,cy,16,0,2*Math.PI);ctx.fillStyle='#fff';ctx.fill();ctx.strokeStyle='#E2E8F0';ctx.lineWidth=3;ctx.stroke();
+  drawWheelChrome(ctx,cx,cy,r);
 }
 
 function updEInfo(){
@@ -946,10 +1057,22 @@ function updEInfo(){
 function eSpinWheel(){
   if(eSpinning||ePool.length<=1)return;
   eSpinning=true;updateBtn();
+  sPop(); haptic(15);
   const tot=(Math.random()*3+5)*2*Math.PI,dur=2800,t0=performance.now(),a0=eAngle;
   function ease(t){return 1-Math.pow(1-t,4);}
+  let lastSeg=-1;
+  const ptr=document.querySelector('#cElim .wptr');
   function spin(now){
     const p=Math.min((now-t0)/dur,1);eAngle=a0+tot*ease(p);buildWheelCanvas();
+    // Tick when pointer crosses segment boundary
+    const n=ePool.length,arc=2*Math.PI/n;
+    const norm=(((-eAngle%(2*Math.PI))+(2*Math.PI))%(2*Math.PI));
+    const seg=Math.floor(norm/arc)%n;
+    if(seg!==lastSeg){
+      lastSeg=seg;
+      sTick(); haptic(5);
+      if(ptr){ptr.classList.remove('bounce');void ptr.offsetWidth;ptr.classList.add('bounce');}
+    }
     if(p<1)requestAnimationFrame(spin);else afterSpin();
   }
   requestAnimationFrame(spin);
@@ -957,8 +1080,14 @@ function eSpinWheel(){
     const n=ePool.length,arc=2*Math.PI/n;
     const norm=(((-eAngle%(2*Math.PI))+(2*Math.PI))%(2*Math.PI));
     const hi=Math.floor(norm/arc)%n,hitItem=ePool[hi];
+    haptic([40,30,40]);
     let fc=0;
-    function flash(){buildWheelCanvas(fc%2===0?hi:-1);fc++;if(fc<8)setTimeout(flash,fc%2===0?120:100);else setTimeout(()=>doElim(hi,hitItem),350);}
+    function flash(){
+      buildWheelCanvas(fc%2===0?hi:-1);
+      if(fc%2===0){sTick();}
+      fc++;
+      if(fc<8)setTimeout(flash,fc%2===0?120:100);else setTimeout(()=>doElim(hi,hitItem),350);
+    }
     flash();
   }
   function doElim(hi,hitItem){
@@ -998,14 +1127,17 @@ function initDiceFaces(){
 function rollDice(){
   if(dRunning)return;dRunning=true;
   document.getElementById('diceTotal').textContent='搖緊...';
+  sPop(); haptic(15);
   let step=0;
   function tick(){
     for(let i=0;i<dCount;i++){const el=document.getElementById('df'+i);if(!el)continue;el.textContent=DICE_FACES[Math.floor(Math.random()*6)];if(step%2===0)el.classList.add('shake');else el.classList.remove('shake');}
+    sRoll(); if(step%3===0)haptic(6);
     step++;
     if(step<20)setTimeout(tick,step<8?60:step<15?110:170);
     else{
       const final=Array.from({length:dCount},()=>Math.floor(Math.random()*6));
-      let sum=0;final.forEach((v,i)=>{const el=document.getElementById('df'+i);if(el){el.textContent=DICE_FACES[v];el.classList.remove('shake');}sum+=v+1;});
+      let sum=0;final.forEach((v,i)=>{const el=document.getElementById('df'+i);if(el){el.textContent=DICE_FACES[v];el.classList.remove('shake');el.classList.remove('land');void el.offsetWidth;el.classList.add('land');}sum+=v+1;});
+      sOpen(); haptic([40,30,60]);
       document.getElementById('diceTotal').textContent=dCount>1?`總點數：${sum}`:`點數：${sum}`;
       dRunning=false;
       const dpb=document.getElementById('dicePlayBtn');
@@ -1078,13 +1210,16 @@ function fgPick(){
   function flash(){
     held.forEach(i=>{const c=document.getElementById('fgc'+i);if(c)c.style.background='rgba(255,255,255,.04)';});
     const f=held[Math.floor(Math.random()*held.length)];const fc=document.getElementById('fgc'+f);
-    if(fc)fc.style.background='rgba(252,211,77,.55)';fi++;
+    if(fc)fc.style.background='rgba(252,211,77,.55)';
+    sTick(); haptic(6);
+    fi++;
     if(fi<14)setTimeout(flash,fi<6?100:fi<11?180:280);else setTimeout(fgReveal,300);
   }
   flash();
   function fgReveal(){
     held.forEach(i=>{const c=document.getElementById('fgc'+i);if(c)c.style.background='';});
     const wi=held[Math.floor(Math.random()*held.length)];
+    sWin(); haptic([60,40,80,40,120]);
     held.forEach(i=>{
       const c=document.getElementById('fgc'+i);if(!c)return;c.classList.remove('held');
       if(i===wi){c.classList.add('winner');let pulse=0;const pt=setInterval(()=>{pulse++;c.style.background=pulse%2===0?'rgba(252,211,77,.5)':'rgba(252,211,77,.15)';if(pulse>=10){clearInterval(pt);c.style.background='rgba(252,211,77,.35)';}},300);}
@@ -1106,6 +1241,7 @@ function showCeleb(w,p){
   const pd=document.getElementById('cPun');
   if(p){pd.textContent='🎁 '+p;pd.style.display='block';}else pd.style.display='none';
   document.getElementById('celeb').classList.add('show');startConf();
+  sWin(); haptic([60,40,80,40,120]);
 }
 window.closeCeleb=function(e){if(e)e.stopPropagation();document.getElementById('celeb').classList.remove('show');stopConf();}
 function startConf(){
